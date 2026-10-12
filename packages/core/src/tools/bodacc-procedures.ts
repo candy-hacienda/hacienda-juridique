@@ -1,6 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { BodaccClient, type BodaccAnnonce } from "../sources/bodacc.js";
+import { parseSirenInput, sirenInputErrorResult, SIREN_DESCRIPTION } from "./siren-input.js";
 import { bodaccUnavailableResult } from "./bodacc-error.js";
 
 const isOuverture = (a: BodaccAnnonce) => /^jugement d.ouverture/i.test(a.jugement?.famille ?? "");
@@ -69,17 +70,16 @@ export function registerBodaccProcedures(server: McpServer): void {
       description:
         "Récupère uniquement les procédures collectives BODACC publiées pour un SIREN : sauvegarde, redressement judiciaire, liquidation, plans, jugements d'ouverture. Désigne l'avis d'ouverture (`avis_ouverture` : date de parution, nature, date du jugement, tribunal, mandataire dans `complement`). Pour chaque annonce, la nature de la procédure est dans `jugement.nature` (pas dans `typeavis`). Source publique BODACC OpenDataSoft sans authentification.",
       inputSchema: {
-        siren: z
-          .string()
-          .regex(/^[0-9]{9}$/)
-          .describe("Numéro SIREN à 9 chiffres"),
+        siren: z.string().describe(SIREN_DESCRIPTION),
       },
     },
     async (args) => {
+      const siren = parseSirenInput(args.siren);
+      if (siren.kind !== "siren") return sirenInputErrorResult(siren);
       const client = new BodaccClient();
       let procedures: Awaited<ReturnType<typeof client.searchProcedures>>;
       try {
-        procedures = await client.searchProcedures(args.siren);
+        procedures = await client.searchProcedures(siren.siren);
       } catch (err) {
         return bodaccUnavailableResult(err);
       }

@@ -1,6 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { BodaccClient } from "../sources/bodacc.js";
+import { parseSirenInput, sirenInputErrorResult, SIREN_DESCRIPTION } from "./siren-input.js";
 import { bodaccUnavailableResult } from "./bodacc-error.js";
 import { loadPappersCredentials } from "../config.js";
 
@@ -36,14 +37,13 @@ export function registerCompanyFullProfile(server: McpServer): void {
       description:
         "Récupère le profil complet d'une entreprise FR par SIREN. Essaie Pappers d'abord (riche : bilans, dirigeants, bénéficiaires effectifs) si la clé API est configurée, sinon fallback gratuit sur BODACC public (annonces uniquement). Indique la source dans la réponse.",
       inputSchema: {
-        siren: z
-          .string()
-          .regex(/^[0-9]{9}$/)
-          .describe("Numéro SIREN à 9 chiffres"),
+        siren: z.string().describe(SIREN_DESCRIPTION),
       },
     },
     async (args) => {
-      const pappers = await tryPappers(args.siren);
+      const siren = parseSirenInput(args.siren);
+      if (siren.kind !== "siren") return sirenInputErrorResult(siren);
+      const pappers = await tryPappers(siren.siren);
       if (pappers.status === "ok") {
         return {
           content: [
@@ -62,7 +62,7 @@ export function registerCompanyFullProfile(server: McpServer): void {
       const bodaccClient = new BodaccClient();
       let annonces: Awaited<ReturnType<typeof bodaccClient.searchBySiren>>;
       try {
-        annonces = await bodaccClient.searchBySiren(args.siren);
+        annonces = await bodaccClient.searchBySiren(siren.siren);
       } catch (err) {
         return bodaccUnavailableResult(err);
       }
@@ -79,7 +79,7 @@ export function registerCompanyFullProfile(server: McpServer): void {
                       ? `Pappers a échoué (${pappers.reason}) et BODACC est sans résultat pour ce SIREN : l'absence de données n'est pas une absence d'informations [à vérifier].`
                       : "Aucune source disponible — Pappers non configuré et BODACC sans résultat pour ce SIREN.",
                   ...(pappers.status === "error" ? { pappers_erreur: pappers.reason } : {}),
-                  siren: args.siren,
+                  siren: siren.siren,
                 },
                 null,
                 2,
@@ -100,7 +100,7 @@ export function registerCompanyFullProfile(server: McpServer): void {
                     ? `Pappers a échoué (${pappers.reason}) — données via BODACC public uniquement (annonces, sans bilans ni dirigeants enrichis). Réessayer ou vérifier la clé Pappers [à vérifier].`
                     : "Pappers non configuré — données via BODACC public uniquement (annonces, sans bilans ni dirigeants enrichis).",
                 ...(pappers.status === "error" ? { pappers_erreur: pappers.reason } : {}),
-                siren: args.siren,
+                siren: siren.siren,
                 annonces,
               },
               null,

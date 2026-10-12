@@ -1,6 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { BodaccClient } from "../sources/bodacc.js";
+import { parseSirenInput, sirenInputErrorResult, SIREN_DESCRIPTION } from "./siren-input.js";
 import { bodaccUnavailableResult } from "./bodacc-error.js";
 
 export function registerBodaccBySiren(server: McpServer): void {
@@ -11,10 +12,7 @@ export function registerBodaccBySiren(server: McpServer): void {
       description:
         "Récupère les annonces BODACC publiées pour un SIREN. Couvre immatriculations, modifications, radiations, procédures collectives. Source publique BODACC OpenDataSoft sans authentification.",
       inputSchema: {
-        siren: z
-          .string()
-          .regex(/^[0-9]{9}$/)
-          .describe("Numéro SIREN à 9 chiffres"),
+        siren: z.string().describe(SIREN_DESCRIPTION),
         limit: z
           .number()
           .int()
@@ -25,10 +23,12 @@ export function registerBodaccBySiren(server: McpServer): void {
       },
     },
     async (args) => {
+      const siren = parseSirenInput(args.siren);
+      if (siren.kind !== "siren") return sirenInputErrorResult(siren);
       const client = new BodaccClient();
       let annonces: Awaited<ReturnType<typeof client.searchBySiren>>;
       try {
-        annonces = await client.searchBySiren(args.siren, args.limit ?? 20);
+        annonces = await client.searchBySiren(siren.siren, args.limit ?? 20);
       } catch (err) {
         return bodaccUnavailableResult(err);
       }
