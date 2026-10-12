@@ -61104,6 +61104,21 @@ var BodaccClient = class {
   }
 };
 
+// ../../../packages/core/src/tools/siren-input.ts
+var TOKEN = /\[[A-Z][A-Z0-9_]*_\d+\]/;
+function parseSirenInput(raw) {
+  const token = TOKEN.exec(raw);
+  if (token) return { kind: "pseudonymized", token: token[0] };
+  const compact = raw.replace(/[\s.  ]/g, "");
+  if (/^\d{9}$/.test(compact)) return { kind: "siren", siren: compact };
+  return { kind: "invalid", value: raw.trim() };
+}
+function sirenInputErrorResult(input) {
+  const text = input.kind === "pseudonymized" ? `Identifiant pseudonymis\xE9 re\xE7u (\xAB ${input.token} \xBB) au lieu d'un num\xE9ro SIREN : la consultation du BODACC exige le SIREN r\xE9el, que seule la r\xE9hydratation par l'application peut fournir. Ce n'est pas une absence de proc\xE9dure : ne pas conclure qu'aucune proc\xE9dure collective n'est ouverte ; marquer l'information \`[\xE0 v\xE9rifier]\` et demander le SIREN \xE0 l'utilisateur, ou v\xE9rifier sur bodacc.fr.` : `SIREN invalide (\xAB ${input.value} \xBB) : 9 chiffres attendus (espaces tol\xE9r\xE9s). Un SIRET (14 chiffres) commence par le SIREN : utiliser ses 9 premiers chiffres.`;
+  return { isError: true, content: [{ type: "text", text }] };
+}
+var SIREN_DESCRIPTION = "Num\xE9ro SIREN \xE0 9 chiffres (espaces tol\xE9r\xE9s, ex. \xAB 883 536 971 \xBB)";
+
 // ../../../packages/core/src/tools/bodacc-error.ts
 function bodaccUnavailableResult(err) {
   const detail = err instanceof BodaccUnavailableError ? err.message : String(err);
@@ -61126,15 +61141,17 @@ function registerBodaccBySiren(server) {
       title: "Annonces BODACC par SIREN",
       description: "R\xE9cup\xE8re les annonces BODACC publi\xE9es pour un SIREN. Couvre immatriculations, modifications, radiations, proc\xE9dures collectives. Source publique BODACC OpenDataSoft sans authentification.",
       inputSchema: {
-        siren: external_exports.string().regex(/^[0-9]{9}$/).describe("Num\xE9ro SIREN \xE0 9 chiffres"),
+        siren: external_exports.string().describe(SIREN_DESCRIPTION),
         limit: external_exports.number().int().min(1).max(100).default(20).describe("Nombre max d'annonces \xE0 retourner (d\xE9faut 20, max 100)")
       }
     },
     async (args) => {
+      const siren = parseSirenInput(args.siren);
+      if (siren.kind !== "siren") return sirenInputErrorResult(siren);
       const client = new BodaccClient();
       let annonces;
       try {
-        annonces = await client.searchBySiren(args.siren, args.limit ?? 20);
+        annonces = await client.searchBySiren(siren.siren, args.limit ?? 20);
       } catch (err) {
         return bodaccUnavailableResult(err);
       }
@@ -61202,14 +61219,16 @@ function registerBodaccProcedures(server) {
       title: "Proc\xE9dures collectives BODACC par SIREN",
       description: "R\xE9cup\xE8re uniquement les proc\xE9dures collectives BODACC publi\xE9es pour un SIREN : sauvegarde, redressement judiciaire, liquidation, plans, jugements d'ouverture. D\xE9signe l'avis d'ouverture (`avis_ouverture` : date de parution, nature, date du jugement, tribunal, mandataire dans `complement`). Pour chaque annonce, la nature de la proc\xE9dure est dans `jugement.nature` (pas dans `typeavis`). Source publique BODACC OpenDataSoft sans authentification.",
       inputSchema: {
-        siren: external_exports.string().regex(/^[0-9]{9}$/).describe("Num\xE9ro SIREN \xE0 9 chiffres")
+        siren: external_exports.string().describe(SIREN_DESCRIPTION)
       }
     },
     async (args) => {
+      const siren = parseSirenInput(args.siren);
+      if (siren.kind !== "siren") return sirenInputErrorResult(siren);
       const client = new BodaccClient();
       let procedures;
       try {
-        procedures = await client.searchProcedures(args.siren);
+        procedures = await client.searchProcedures(siren.siren);
       } catch (err) {
         return bodaccUnavailableResult(err);
       }
@@ -61246,11 +61265,13 @@ function registerCompanyFullProfile(server) {
       title: "Profil entreprise FR (Pappers + fallback BODACC)",
       description: "R\xE9cup\xE8re le profil complet d'une entreprise FR par SIREN. Essaie Pappers d'abord (riche : bilans, dirigeants, b\xE9n\xE9ficiaires effectifs) si la cl\xE9 API est configur\xE9e, sinon fallback gratuit sur BODACC public (annonces uniquement). Indique la source dans la r\xE9ponse.",
       inputSchema: {
-        siren: external_exports.string().regex(/^[0-9]{9}$/).describe("Num\xE9ro SIREN \xE0 9 chiffres")
+        siren: external_exports.string().describe(SIREN_DESCRIPTION)
       }
     },
     async (args) => {
-      const pappers = await tryPappers(args.siren);
+      const siren = parseSirenInput(args.siren);
+      if (siren.kind !== "siren") return sirenInputErrorResult(siren);
+      const pappers = await tryPappers(siren.siren);
       if (pappers.status === "ok") {
         return {
           content: [
@@ -61268,7 +61289,7 @@ function registerCompanyFullProfile(server) {
       const bodaccClient = new BodaccClient();
       let annonces;
       try {
-        annonces = await bodaccClient.searchBySiren(args.siren);
+        annonces = await bodaccClient.searchBySiren(siren.siren);
       } catch (err) {
         return bodaccUnavailableResult(err);
       }
@@ -61282,7 +61303,7 @@ function registerCompanyFullProfile(server) {
                   source: "none",
                   message: pappers.status === "error" ? `Pappers a \xE9chou\xE9 (${pappers.reason}) et BODACC est sans r\xE9sultat pour ce SIREN : l'absence de donn\xE9es n'est pas une absence d'informations [\xE0 v\xE9rifier].` : "Aucune source disponible \u2014 Pappers non configur\xE9 et BODACC sans r\xE9sultat pour ce SIREN.",
                   ...pappers.status === "error" ? { pappers_erreur: pappers.reason } : {},
-                  siren: args.siren
+                  siren: siren.siren
                 },
                 null,
                 2
@@ -61300,7 +61321,7 @@ function registerCompanyFullProfile(server) {
                 source: "bodacc-public",
                 message: pappers.status === "error" ? `Pappers a \xE9chou\xE9 (${pappers.reason}) \u2014 donn\xE9es via BODACC public uniquement (annonces, sans bilans ni dirigeants enrichis). R\xE9essayer ou v\xE9rifier la cl\xE9 Pappers [\xE0 v\xE9rifier].` : "Pappers non configur\xE9 \u2014 donn\xE9es via BODACC public uniquement (annonces, sans bilans ni dirigeants enrichis).",
                 ...pappers.status === "error" ? { pappers_erreur: pappers.reason } : {},
-                siren: args.siren,
+                siren: siren.siren,
                 annonces
               },
               null,
