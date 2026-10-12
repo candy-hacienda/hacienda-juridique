@@ -63,7 +63,7 @@ describe("normalizeArticleNum", () => {
     expect(normalizeArticleNum("R631-1")).toBe("R631-1");
     // L441-10 (Code de commerce) : déjà au format canonique, ne doit pas être
     // altéré. « Article introuvable » sur ce numéro n'est donc pas causé par
-    // normalizeArticleNum (voir docs/handoff/latest.md, défaut serveur (b)).
+    // normalizeArticleNum (voir interne/docs/handoff/latest.md, défaut serveur (b)).
     expect(normalizeArticleNum("L441-10")).toBe("L441-10");
     expect(normalizeArticleNum("L. 441-10")).toBe("L441-10");
   });

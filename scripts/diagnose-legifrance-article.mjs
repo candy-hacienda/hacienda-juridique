@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Diagnostic prêt à lancer pour le défaut serveur (b) du handoff
- * (docs/handoff/latest.md, « B — 01-spa-review FAIT ») :
+ * (interne/docs/handoff/latest.md, « B — 01-spa-review FAIT ») :
  *
  *   legifrance_get_article({ code: "Code de commerce", num: "L441-10" })
  *   → « Article introuvable », observé deux fois, alors que l'article existe.
