@@ -1,4 +1,4 @@
-import { Agent, request, type Dispatcher } from "undici";
+import { request, type Dispatcher } from "undici";
 
 export const BOSS_HOME_URL = "https://boss.gouv.fr/portail/accueil.html";
 export const BOSS_ORIGIN = "https://boss.gouv.fr";
@@ -124,18 +124,9 @@ export async function fetchBossText(urlInput: string, options: BossRequestOption
       throw error;
     }
 
-    const dispatcher = new Agent({
-      connect: {
-        rejectUnauthorized: false,
-        servername: "boss.gouv.fr",
-      },
-    });
-
-    try {
-      return await fetchBossTextWithDispatcher(url, options, dispatcher, BOSS_COMPAT_USER_AGENT);
-    } finally {
-      await dispatcher.close();
-    }
+    // boss.gouv.fr coupe la connexion (ECONNRESET) selon le User-Agent, pas pour une raison
+    // de certificat : le nouvel essai change le User-Agent et garde la vérification TLS.
+    return fetchBossTextWithDispatcher(url, options, undefined, BOSS_COMPAT_USER_AGENT);
   }
 }
 
