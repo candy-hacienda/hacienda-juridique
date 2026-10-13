@@ -64,7 +64,19 @@
         "cgv-generator",
         "financement-startup",
         "consulter-digest",
-        "analyser-rupture-brutale"
+        "analyser-rupture-brutale",
+        "asset-vs-share-distress",
+        "cas",
+        "cession-actifs-isoles",
+        "declaration-cessation-paiements",
+        "defense-dirigeant",
+        "distress-cedant",
+        "management-package-pe",
+        "mise-en-demeure-commerciale",
+        "pre-pack-cession",
+        "prevention-difficultes",
+        "reprise-a-la-barre",
+        "responsabilite-dirigeant"
       ],
       "agents": [
         "bodacc-watcher",
