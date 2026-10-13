@@ -43,9 +43,11 @@ describe("piste_status : jeton OAuth", () => {
 
     const texte = await appelerPisteStatus();
 
-    expect(texte).not.toContain(JETON);
-    expect(texte).not.toContain("JETON-SECRET");
-    expect(JSON.parse(texte).oauth).toMatchObject({ status: 200, ok: true });
+    // Aucun contenu de la réponse OAuth : ni le jeton, ni un fragment, ni ses autres champs.
+    expect(JSON.parse(texte).oauth).toEqual({ status: 200, ok: true });
+    for (const fragment of ["eyJ", "JETON", "access_token", "Bearer", "expires_in"]) {
+      expect(texte).not.toContain(fragment);
+    }
   });
 
   it("garde le début de la réponse d'erreur, utile au diagnostic", async () => {
