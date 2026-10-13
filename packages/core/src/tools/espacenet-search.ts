@@ -4,6 +4,7 @@ import {
   EspacenetClient,
   type EspacenetSearchResponse,
 } from "../sources/espacenet.js";
+import { pseudonymizedDateResult } from "./date-input.js";
 
 export const EspacenetSearchArgsSchema = z.object({
   query: z.string().min(1),
@@ -58,16 +59,17 @@ export function registerEspacenetSearch(
   server.tool(
     "espacenet_search",
     EspacenetSearchArgsSchema.shape,
-    async (raw) => ({
-      content: [
-        {
-          type: "text",
-          text: await callEspacenetSearch(
-            EspacenetSearchArgsSchema.parse(raw),
-            client
-          ),
-        },
-      ],
-    })
+    async (raw) =>
+      pseudonymizedDateResult(raw, { datePublicationMin: "filtre", datePublicationMax: "filtre" }) ?? {
+        content: [
+          {
+            type: "text",
+            text: await callEspacenetSearch(
+              EspacenetSearchArgsSchema.parse(raw),
+              client
+            ),
+          },
+        ],
+      }
   );
 }

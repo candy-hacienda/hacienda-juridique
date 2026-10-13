@@ -8,6 +8,8 @@ import { registerGetLoda } from "../src/tools/get-loda.js";
 import { registerJudilibreTools } from "../src/tools/judilibre.js";
 import { registerEurlexTools } from "../src/tools/eurlex.js";
 import { registerBofipAliases } from "../src/tools/bofip.js";
+import { registerEspacenetSearch } from "../src/tools/espacenet-search.js";
+import { registerInpiMarquesPublicationsRecentes } from "../src/tools/inpi-marques-publications-recentes.js";
 
 type Handler = (args: Record<string, unknown>) => Promise<any>;
 type Registered = { config: { inputSchema?: Record<string, z.ZodTypeAny> }; handler: Handler };
@@ -17,6 +19,10 @@ function captureAll(register: (s: McpServer) => void) {
   register({
     registerTool: (name: string, config: Registered["config"], handler: Handler) => {
       tools.set(name, { config, handler });
+    },
+    // Ancienne forme `server.tool(nom, schéma, gestionnaire)` (outils PI).
+    tool: (name: string, inputSchema: Record<string, z.ZodTypeAny>, handler: Handler) => {
+      tools.set(name, { config: { inputSchema }, handler });
     },
   } as unknown as McpServer);
   return tools;
@@ -69,6 +75,8 @@ describe("outils à date : un jeton reçoit un message clair, sans appel réseau
     ["eurlex_recherche", () => captureAll((s) => registerEurlexTools(s, clientInterdit)), { query: "insolvency", date_from: "[DATE_1]" }],
     ["eurlex_consolidated", () => captureAll((s) => registerEurlexTools(s, clientInterdit)), { celex_id: "32015R0848", date: "[DATE_D+0]", mode: "nearest" }],
     ["bofip_rechercher", () => captureAll((s) => registerBofipAliases(s, httpInterdit)), { query: "plus-value", dateFin: "[DATE_2]" }],
+    ["espacenet_search", () => captureAll((s) => registerEspacenetSearch(s, clientInterdit)), { query: "batterie", datePublicationMin: "[DATE_1]" }],
+    ["inpi_marques_publications_recentes", () => captureAll((s) => registerInpiMarquesPublicationsRecentes(s, clientInterdit)), { since: "[DATE_D-30]" }],
   ];
 
   for (const [name, register, args] of cas) {
@@ -84,10 +92,12 @@ describe("outils à date : un jeton reçoit un message clair, sans appel réseau
     });
   }
 
-  it("Judilibre et EUR-Lex refusent toujours une date mal formée", () => {
+  it("Judilibre, EUR-Lex et INPI refusent toujours une date mal formée", () => {
     const judilibre = captureAll((s) => registerJudilibreTools(s, {} as never, clientInterdit)).get("judilibre_recherche")!;
     const eurlex = captureAll((s) => registerEurlexTools(s, clientInterdit)).get("eurlex_recherche")!;
     expect(z.object(judilibre.config.inputSchema!).safeParse({ query: "x", dateStart: "15/03/2024" }).success).toBe(false);
     expect(z.object(eurlex.config.inputSchema!).safeParse({ query: "xyz", date_from: "2024" }).success).toBe(false);
+    const inpi = captureAll((s) => registerInpiMarquesPublicationsRecentes(s, clientInterdit)).get("inpi_marques_publications_recentes")!;
+    expect(z.object(inpi.config.inputSchema!).safeParse({ since: "15/03/2024" }).success).toBe(false);
   });
 });
