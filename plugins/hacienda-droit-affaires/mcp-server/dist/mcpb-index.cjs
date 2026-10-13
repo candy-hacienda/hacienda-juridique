@@ -60953,7 +60953,7 @@ function registerEspacenetSearch(server, client) {
   server.tool(
     "espacenet_search",
     EspacenetSearchArgsSchema.shape,
-    async (raw) => ({
+    async (raw) => pseudonymizedDateResult(raw, { datePublicationMin: "filtre", datePublicationMax: "filtre" }) ?? {
       content: [
         {
           type: "text",
@@ -60963,7 +60963,7 @@ function registerEspacenetSearch(server, client) {
           )
         }
       ]
-    })
+    }
   );
 }
 
@@ -61347,7 +61347,7 @@ function registerCompanyFullProfile(server) {
 
 // ../../../packages/core/src/tools/inpi-marques-publications-recentes.ts
 var InpiMarquesPublicationsRecentesArgsSchema = external_exports.object({
-  since: external_exports.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  since: external_exports.string().regex(ISO_DATE_OR_TOKEN),
   classes: external_exports.array(external_exports.string()).optional(),
   motCle: external_exports.string().optional(),
   titulaire: external_exports.string().optional(),
@@ -61394,7 +61394,7 @@ function registerInpiMarquesPublicationsRecentes(server, client) {
   server.tool(
     "inpi_marques_publications_recentes",
     InpiMarquesPublicationsRecentesArgsSchema.shape,
-    async (raw) => ({
+    async (raw) => pseudonymizedDateResult(raw, { since: "filtre" }) ?? {
       content: [{
         type: "text",
         text: await callInpiMarquesPublicationsRecentes(
@@ -61402,7 +61402,7 @@ function registerInpiMarquesPublicationsRecentes(server, client) {
           client
         )
       }]
-    })
+    }
   );
 }
 
