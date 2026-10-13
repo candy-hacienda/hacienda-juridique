@@ -243,6 +243,12 @@ La colonne de droite n'est pas optionnelle : tout article du tableau que la note
 cite est lu avant la rédaction. Un article hors tableau cité en cours de
 rédaction se lit aussi, ou reste `[à vérifier]`.
 
+**Dossier fictif (formation, test, persona) : la lecture a lieu quand même.**
+Les parties et les SIREN sont inventés, le droit ne l'est pas. Sauter BODACC et
+Pappers sur un SIREN fictif, en le disant dans la note du relecteur ; lire les
+articles ci-dessus comme pour un dossier client. « Le dossier est fictif » ne
+justifie jamais de laisser un article en `[à vérifier]` quand Légifrance répond.
+
 Seuls les articles effectivement ramenés par l'outil reçoivent `[Légifrance]`
 (CLAUDE.md §2). La note du relecteur porte deux lignes, toujours présentes :
 « Articles lus dans cette session : … » et « Articles cités non lus : … (ou
