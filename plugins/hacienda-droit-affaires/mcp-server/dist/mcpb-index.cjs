@@ -16728,7 +16728,7 @@ var require_agent = __commonJS({
     function defaultFactory(origin, opts) {
       return opts && opts.connections === 1 ? new Client(origin, opts) : new Pool(origin, opts);
     }
-    var Agent2 = class extends DispatcherBase {
+    var Agent = class extends DispatcherBase {
       constructor({ factory = defaultFactory, maxOrigins = Infinity, connect, ...options } = {}) {
         if (typeof factory !== "function") {
           throw new InvalidArgumentError("factory must be a function.");
@@ -16837,7 +16837,7 @@ var require_agent = __commonJS({
         return allClientStats;
       }
     };
-    module2.exports = Agent2;
+    module2.exports = Agent;
   }
 });
 
@@ -17507,7 +17507,7 @@ var require_proxy_agent = __commonJS({
   "../../../packages/core/node_modules/undici/lib/dispatcher/proxy-agent.js"(exports2, module2) {
     "use strict";
     var { kProxy, kClose, kDestroy, kDispatch } = require_symbols();
-    var Agent2 = require_agent();
+    var Agent = require_agent();
     var Pool = require_pool();
     var DispatcherBase = require_dispatcher_base();
     var { InvalidArgumentError, RequestAbortedError, SecureProxyConnectionError } = require_errors2();
@@ -17637,7 +17637,7 @@ var require_proxy_agent = __commonJS({
         } else {
           this[kClient] = clientFactory(url2, { connect });
         }
-        this[kAgent] = new Agent2({
+        this[kAgent] = new Agent({
           ...opts,
           factory,
           connect: async (opts2, callback) => {
@@ -17765,7 +17765,7 @@ var require_env_http_proxy_agent = __commonJS({
     var DispatcherBase = require_dispatcher_base();
     var { kClose, kDestroy, kClosed, kDestroyed, kDispatch, kNoProxyAgent, kHttpProxyAgent, kHttpsProxyAgent } = require_symbols();
     var ProxyAgent = require_proxy_agent();
-    var Agent2 = require_agent();
+    var Agent = require_agent();
     var DEFAULT_PORTS = {
       "http:": 80,
       "https:": 443
@@ -17778,7 +17778,7 @@ var require_env_http_proxy_agent = __commonJS({
         super();
         this.#opts = opts;
         const { httpProxy, httpsProxy, noProxy, ...agentOpts } = opts;
-        this[kNoProxyAgent] = new Agent2(agentOpts);
+        this[kNoProxyAgent] = new Agent(agentOpts);
         const HTTP_PROXY = httpProxy ?? process.env.http_proxy ?? process.env.HTTP_PROXY;
         if (HTTP_PROXY) {
           this[kHttpProxyAgent] = new ProxyAgent({ ...agentOpts, uri: HTTP_PROXY });
@@ -20431,7 +20431,7 @@ var require_mock_agent = __commonJS({
   "../../../packages/core/node_modules/undici/lib/mock/mock-agent.js"(exports2, module2) {
     "use strict";
     var { kClients } = require_symbols();
-    var Agent2 = require_agent();
+    var Agent = require_agent();
     var {
       kAgent,
       kMockAgentSet,
@@ -20469,7 +20469,7 @@ var require_mock_agent = __commonJS({
         if (opts?.agent && typeof opts.agent.dispatch !== "function") {
           throw new InvalidArgumentError("Argument opts.agent must implement Agent");
         }
-        const agent = opts?.agent ? opts.agent : new Agent2(opts);
+        const agent = opts?.agent ? opts.agent : new Agent(opts);
         this[kAgent] = agent;
         this[kClients] = agent[kClients];
         this[kOptions] = mockOptions;
@@ -21076,7 +21076,7 @@ var require_snapshot_recorder = __commonJS({
 var require_snapshot_agent = __commonJS({
   "../../../packages/core/node_modules/undici/lib/mock/snapshot-agent.js"(exports2, module2) {
     "use strict";
-    var Agent2 = require_agent();
+    var Agent = require_agent();
     var MockAgent = require_mock_agent();
     var { SnapshotRecorder } = require_snapshot_recorder();
     var WrapHandler = require_wrap_handler();
@@ -21127,7 +21127,7 @@ var require_snapshot_agent = __commonJS({
         });
         this[kSnapshotLoaded] = false;
         if (this[kSnapshotMode] === "record" || this[kSnapshotMode] === "update" || this[kSnapshotMode] === "playback" && opts.excludeUrls && opts.excludeUrls.length > 0) {
-          this[kRealAgent] = new Agent2(opts);
+          this[kRealAgent] = new Agent(opts);
         }
         if ((this[kSnapshotMode] === "playback" || this[kSnapshotMode] === "update") && this[kSnapshotPath]) {
           this.loadSnapshots().catch(() => {
@@ -21365,9 +21365,9 @@ var require_global2 = __commonJS({
     "use strict";
     var globalDispatcher = /* @__PURE__ */ Symbol.for("undici.globalDispatcher.1");
     var { InvalidArgumentError } = require_errors2();
-    var Agent2 = require_agent();
+    var Agent = require_agent();
     if (getGlobalDispatcher() === void 0) {
-      setGlobalDispatcher(new Agent2());
+      setGlobalDispatcher(new Agent());
     }
     function setGlobalDispatcher(agent) {
       if (!agent || typeof agent.dispatch !== "function") {
@@ -31821,7 +31821,7 @@ var require_undici = __commonJS({
     var Pool = require_pool();
     var BalancedPool = require_balanced_pool();
     var RoundRobinPool = require_round_robin_pool();
-    var Agent2 = require_agent();
+    var Agent = require_agent();
     var ProxyAgent = require_proxy_agent();
     var Socks5ProxyAgent = require_socks5_proxy_agent();
     var EnvHttpProxyAgent = require_env_http_proxy_agent();
@@ -31848,7 +31848,7 @@ var require_undici = __commonJS({
     module2.exports.Pool = Pool;
     module2.exports.BalancedPool = BalancedPool;
     module2.exports.RoundRobinPool = RoundRobinPool;
-    module2.exports.Agent = Agent2;
+    module2.exports.Agent = Agent;
     module2.exports.ProxyAgent = ProxyAgent;
     module2.exports.Socks5ProxyAgent = Socks5ProxyAgent;
     module2.exports.EnvHttpProxyAgent = EnvHttpProxyAgent;
@@ -56846,7 +56846,7 @@ function registerStatus(server, config2, cache, auth, http) {
         result.oauth = {
           status: oauthRes.statusCode,
           ok: oauthRes.statusCode === 200,
-          bodyPreview: oauthBody.slice(0, 200)
+          ...oauthRes.statusCode === 200 ? {} : { bodyPreview: oauthBody.slice(0, 200) }
         };
         if (oauthRes.statusCode !== 200) {
           result.diagnostic = `\u274C OAuth PISTE \xE9choue avec HTTP ${oauthRes.statusCode}. ${oauthRes.statusCode === 401 ? "Credentials invalides ou secret expir\xE9 (r\xE9g\xE9n\xE9rer sur piste.gouv.fr)." : oauthRes.statusCode === 400 ? "Requ\xEAte OAuth malform\xE9e \u2014 v\xE9rifier que PISTE_CLIENT_ID est bien d\xE9fini." : oauthRes.statusCode === 403 ? "Acc\xE8s OAuth refus\xE9 \u2014 application possiblement d\xE9sactiv\xE9e c\xF4t\xE9 DILA." : "Erreur infrastructure PISTE."}`;
@@ -58796,17 +58796,7 @@ async function fetchBossText(urlInput, options = {}) {
     if (!isBossTransportFailure(error51)) {
       throw error51;
     }
-    const dispatcher = new import_undici5.Agent({
-      connect: {
-        rejectUnauthorized: false,
-        servername: "boss.gouv.fr"
-      }
-    });
-    try {
-      return await fetchBossTextWithDispatcher(url2, options, dispatcher, BOSS_COMPAT_USER_AGENT);
-    } finally {
-      await dispatcher.close();
-    }
+    return fetchBossTextWithDispatcher(url2, options, void 0, BOSS_COMPAT_USER_AGENT);
   }
 }
 async function fetchBossTextWithDispatcher(url2, options, dispatcher, userAgent = BOSS_USER_AGENT) {
