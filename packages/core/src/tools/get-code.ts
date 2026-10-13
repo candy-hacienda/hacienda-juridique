@@ -5,6 +5,7 @@ import { ConsultTextResponseSchema } from "../schemas.js";
 import { resolveLegitext, listKnownCodes } from "../codes-legitext.js";
 import { describeVigueur } from "../format.js";
 import { log } from "../logger.js";
+import { pseudonymizedDateResult } from "./date-input.js";
 
 interface SectionLite {
   id: string | undefined;
@@ -70,6 +71,8 @@ export function registerGetCode(server: McpServer, http: PisteHttpClient) {
       },
     },
     async (args) => {
+      const pseudonymized = pseudonymizedDateResult(args, { date: "version" });
+      if (pseudonymized) return pseudonymized;
       const legitext = resolveLegitext(args.code);
       if (!legitext) {
         return {

@@ -21,6 +21,7 @@ import type {
   EurlexSearchArgs,
   EurlexSearchResponse,
 } from "../eurlex/types.js";
+import { ISO_DATE_OR_TOKEN, pseudonymizedDateResult } from "./date-input.js";
 
 export interface EurlexRechercheArgs {
   query: string;
@@ -291,11 +292,11 @@ export function registerEurlexTools(server: McpServer, client: EurlexClientLike 
         resource_type: z.enum(["any", "regulation", "directive", "decision", "case-law"]).default("any"),
         language: z.enum(["FRA", "ENG", "DEU"]).default("FRA"),
         limit: z.number().int().min(1).max(50).default(10),
-        date_from: z.string().regex(/^\d{4}-\d{2}-\d{2}$/u).optional(),
-        date_to: z.string().regex(/^\d{4}-\d{2}-\d{2}$/u).optional(),
+        date_from: z.string().regex(ISO_DATE_OR_TOKEN).optional(),
+        date_to: z.string().regex(ISO_DATE_OR_TOKEN).optional(),
       },
     },
-    (args) => callEurlexRecherche(client, args),
+    async (args) => pseudonymizedDateResult(args, { date_from: "filtre", date_to: "filtre" }) ?? callEurlexRecherche(client, args),
   );
 
   server.registerTool(
@@ -334,12 +335,12 @@ export function registerEurlexTools(server: McpServer, client: EurlexClientLike 
       inputSchema: {
         celex_id: z.string().min(5).describe("Identifiant CELEX de l'acte initial, par exemple 32016R0679."),
         language: z.enum(["FRA", "ENG", "DEU"]).default("FRA"),
-        date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/u).optional(),
+        date: z.string().regex(ISO_DATE_OR_TOKEN).optional(),
         mode: z.enum(["list", "nearest", "fetch"]).default("list"),
         max_chars: z.number().int().min(1000).max(50_000).default(20_000),
       },
     },
-    (args) => callEurlexConsolidated(client, args),
+    async (args) => pseudonymizedDateResult(args, { date: "version" }) ?? callEurlexConsolidated(client, args),
   );
 
   server.registerTool(

@@ -4,6 +4,7 @@ import type { PisteHttpClient } from "../http.js";
 import { ConsultTextResponseSchema } from "../schemas.js";
 import { describeVigueur } from "../format.js";
 import { log } from "../logger.js";
+import { pseudonymizedDateResult } from "./date-input.js";
 
 export function registerGetLoda(server: McpServer, http: PisteHttpClient) {
   server.registerTool(
@@ -26,6 +27,8 @@ export function registerGetLoda(server: McpServer, http: PisteHttpClient) {
       },
     },
     async (args) => {
+      const pseudonymized = pseudonymizedDateResult(args, { date: "version" });
+      if (pseudonymized) return pseudonymized;
       const date = args.date ?? new Date().toISOString().slice(0, 10);
       const raw = await http.post("/consult/lawDecree", { textId: args.textId, date });
       const parsed = ConsultTextResponseSchema.safeParse(raw);

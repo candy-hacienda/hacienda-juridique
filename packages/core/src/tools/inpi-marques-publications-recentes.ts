@@ -4,9 +4,10 @@ import {
   InpiClient,
   type InpiPublicationsRecentesResponse,
 } from "../sources/inpi-marques.js";
+import { ISO_DATE_OR_TOKEN, pseudonymizedDateResult } from "./date-input.js";
 
 export const InpiMarquesPublicationsRecentesArgsSchema = z.object({
-  since: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  since: z.string().regex(ISO_DATE_OR_TOKEN),
   classes: z.array(z.string()).optional(),
   motCle: z.string().optional(),
   titulaire: z.string().optional(),
@@ -69,14 +70,15 @@ export function registerInpiMarquesPublicationsRecentes(
   server.tool(
     "inpi_marques_publications_recentes",
     InpiMarquesPublicationsRecentesArgsSchema.shape,
-    async (raw) => ({
-      content: [{
-        type: "text",
-        text: await callInpiMarquesPublicationsRecentes(
-          InpiMarquesPublicationsRecentesArgsSchema.parse(raw),
-          client
-        ),
-      }],
-    })
+    async (raw) =>
+      pseudonymizedDateResult(raw, { since: "filtre" }) ?? {
+        content: [{
+          type: "text",
+          text: await callInpiMarquesPublicationsRecentes(
+            InpiMarquesPublicationsRecentesArgsSchema.parse(raw),
+            client
+          ),
+        }],
+      }
   );
 }
