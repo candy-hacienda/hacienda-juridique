@@ -56522,7 +56522,7 @@ function registerStatus(server, config2, cache, auth, http) {
         result.oauth = {
           status: oauthRes.statusCode,
           ok: oauthRes.statusCode === 200,
-          bodyPreview: oauthBody.slice(0, 200)
+          ...oauthRes.statusCode === 200 ? {} : { bodyPreview: oauthBody.slice(0, 200) }
         };
         if (oauthRes.statusCode !== 200) {
           result.diagnostic = `\u274C OAuth PISTE \xE9choue avec HTTP ${oauthRes.statusCode}. ${oauthRes.statusCode === 401 ? "Credentials invalides ou secret expir\xE9 (r\xE9g\xE9n\xE9rer sur piste.gouv.fr)." : oauthRes.statusCode === 400 ? "Requ\xEAte OAuth malform\xE9e \u2014 v\xE9rifier que PISTE_CLIENT_ID est bien d\xE9fini." : oauthRes.statusCode === 403 ? "Acc\xE8s OAuth refus\xE9 \u2014 application possiblement d\xE9sactiv\xE9e c\xF4t\xE9 DILA." : "Erreur infrastructure PISTE."}`;
@@ -58228,17 +58228,7 @@ async function fetchBossText(urlInput, options = {}) {
     if (!isBossTransportFailure(error51)) {
       throw error51;
     }
-    const dispatcher = new import_undici5.Agent({
-      connect: {
-        rejectUnauthorized: false,
-        servername: "boss.gouv.fr"
-      }
-    });
-    try {
-      return await fetchBossTextWithDispatcher(url2, options, dispatcher, BOSS_COMPAT_USER_AGENT);
-    } finally {
-      await dispatcher.close();
-    }
+    return fetchBossTextWithDispatcher(url2, options, void 0, BOSS_COMPAT_USER_AGENT);
   }
 }
 async function fetchBossTextWithDispatcher(url2, options, dispatcher, userAgent = BOSS_USER_AGENT) {
