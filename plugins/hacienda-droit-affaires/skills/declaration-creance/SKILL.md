@@ -147,6 +147,7 @@ Structurer la sortie avec : faits retenus, droit applicable, analyse, incertitud
    - **Tribunal** — `avis_ouverture.tribunal` ; **numéro RG** — rarement publié : `[à vérifier]` s'il n'est pas dans le complément.
    - Signaler toute note de l'outil (plusieurs avis d'ouverture, rectificatif) dans la note du relecteur.
 4. Si aucune procédure trouvée pour ce SIREN : stopper et demander confirmation (le débiteur est-il bien en procédure ? Le SIREN est-il exact ?).
+   Exception, dossier fictif : pas de lookup ni d'arrêt. Reprendre les données de procédure fournies, à confirmer sur l'avis, et poursuivre (lecture des articles comprise, étape 4 bis).
 
 Tags de provenance : `[BODACC]` pour tout champ extrait, `[à vérifier]` pour tout champ non parsable.
 
