@@ -136,6 +136,29 @@ describe("fetchBossText", () => {
   });
 });
 
+describe("fetchBossText : connexion coupée par boss.gouv.fr", () => {
+  it("réessaie avec un User-Agent de navigateur, par le même client et sans couper la vérification TLS", async () => {
+    // boss.gouv.fr coupe la connexion (ECONNRESET) selon le User-Agent ; le certificat est valide.
+    // Le nouvel essai passe donc par le client par défaut (vérification du certificat incluse).
+    const pool = mockAgent.get("https://boss.gouv.fr");
+    pool
+      .intercept({ method: "GET", path: "/portail/accueil.html", headers: { "user-agent": BOSS_USER_AGENT } })
+      .replyWithError(Object.assign(new Error("read ECONNRESET"), { code: "ECONNRESET" }));
+    pool
+      .intercept({
+        method: "GET",
+        path: "/portail/accueil.html",
+        headers: { "user-agent": (ua: string) => ua.startsWith("Mozilla/5.0") },
+      })
+      .reply(200, "<html>BOSS</html>", { headers: { "content-type": "text/html; charset=utf-8" } });
+
+    const response = await fetchBossText(BOSS_HOME_URL);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.text).toBe("<html>BOSS</html>");
+  });
+});
+
 describe("fetchBossDocumentWithRobots", () => {
   it("throws before fetching when robots blocks the document", async () => {
     await expect(fetchBossDocumentWithRobots(BOSS_HOME_URL, robotsDisallow)).rejects.toBeInstanceOf(BossRobotsBlockedError);

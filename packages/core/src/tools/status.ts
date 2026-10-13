@@ -54,10 +54,11 @@ export function registerStatus(
           body,
         });
         const oauthBody = await oauthRes.body.text();
+        // Une réponse 200 contient le jeton d'accès : jamais renvoyé au modèle.
         result.oauth = {
           status: oauthRes.statusCode,
           ok: oauthRes.statusCode === 200,
-          bodyPreview: oauthBody.slice(0, 200),
+          ...(oauthRes.statusCode === 200 ? {} : { bodyPreview: oauthBody.slice(0, 200) }),
         };
         if (oauthRes.statusCode !== 200) {
           result.diagnostic = `❌ OAuth PISTE échoue avec HTTP ${oauthRes.statusCode}. ${
