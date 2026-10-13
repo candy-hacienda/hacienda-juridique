@@ -5,6 +5,7 @@ import { ConsultCirculaireResponseSchema, SearchResponseSchema } from "../schema
 import { formatSearchResultsAsMarkdown, normalizeLegiDate, summarizeSearchResponse } from "../format.js";
 import { log } from "../logger.js";
 import { buildSearchRequest } from "../search-builder.js";
+import { pseudonymizedDateResult } from "./date-input.js";
 
 export interface BofipRechercherArgs {
   query: string;
@@ -152,7 +153,7 @@ export function registerBofipAliases(server: McpServer, http: PisteHttpClient) {
         dateFin: z.string().optional().describe("Date de fin (yyyy-mm-dd)."),
       },
     },
-    (args) => callBofipRechercher(http, args),
+    async (args) => pseudonymizedDateResult(args, { dateDebut: "filtre", dateFin: "filtre" }) ?? callBofipRechercher(http, args),
   );
 
   server.registerTool(

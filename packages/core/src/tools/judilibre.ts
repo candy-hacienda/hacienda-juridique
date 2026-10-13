@@ -3,6 +3,7 @@ import { z } from "zod";
 import { JudilibreClient } from "../judilibre/client.js";
 import type { JudilibreConfig } from "../judilibre/config.js";
 import { formatJudilibreDecision, formatJudilibreSearch } from "../judilibre/format.js";
+import { ISO_DATE_OR_TOKEN, pseudonymizedDateResult } from "./date-input.js";
 
 export interface JudilibreRechercheArgs {
   query: string;
@@ -19,7 +20,7 @@ export interface JudilibreRechercheArgs {
 const CHAMBERS = ["pl", "mi", "civ1", "civ2", "civ3", "comm", "soc", "cr", "creun", "ordo", "allciv", "other"] as const;
 const JURISDICTIONS = ["cc", "ca", "tj", "tcom"] as const;
 const PUBLICATIONS = ["b", "r", "l", "c", "n"] as const;
-const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date au format AAAA-MM-JJ");
+const isoDate = z.string().regex(ISO_DATE_OR_TOKEN, "Date au format AAAA-MM-JJ");
 
 export interface JudilibreGetDecisionArgs {
   id: string;
@@ -119,7 +120,7 @@ export function registerJudilibreTools(
         dateEnd: isoDate.optional().describe("Décisions rendues jusqu'à cette date (AAAA-MM-JJ)."),
       },
     },
-    (args) => callJudilibreRecherche(client, args),
+    async (args) => pseudonymizedDateResult(args, { dateStart: "filtre", dateEnd: "filtre" }) ?? callJudilibreRecherche(client, args),
   );
 
   server.registerTool(

@@ -6,6 +6,9 @@ import { buildSearchRequest, SearchInputError } from "../search-builder.js";
 import { summarizeSearchResponse, formatSearchResultsAsMarkdown } from "../format.js";
 import { canonicalCodeName } from "../codes-legitext.js";
 import { log } from "../logger.js";
+import { pseudonymizedDateResult, type DateRole } from "./date-input.js";
+
+const RECHERCHE_DATES: Record<string, DateRole> = { dateVersion: "version", dateDebut: "filtre", dateFin: "filtre" };
 
 const rechercheInputSchema = {
   query: z.string().min(1).describe("Termes à rechercher (mots-clés ou expression)."),
@@ -54,6 +57,8 @@ function registerRechercheTool(server: McpServer, http: PisteHttpClient, name: s
       inputSchema: rechercheInputSchema,
     },
     async (args) => {
+      const pseudonymized = pseudonymizedDateResult(args, RECHERCHE_DATES);
+      if (pseudonymized) return pseudonymized;
       // Si le user passe un LEGITEXT comme `code`, on le résout en nom canonique
       // (les fonds CODE_* attendent le nom littéral, pas l'identifiant).
       // Le filtre NOM_CODE est sensible à la casse : on envoie le nom officiel
