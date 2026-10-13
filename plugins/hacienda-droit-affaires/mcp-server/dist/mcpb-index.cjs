@@ -57533,6 +57533,20 @@ function registerGetArticle(server, http) {
   );
 }
 
+// ../../../packages/core/src/tools/date-input.ts
+var TOKEN = /\[[A-Z][A-Z0-9_]*_(?:\d+|D[+-]\d+)\]/;
+var ISO_DATE_OR_TOKEN = new RegExp(`^(?:\\d{4}-\\d{2}-\\d{2}|${TOKEN.source})$`, "u");
+function pseudonymizedDateResult(args, fields) {
+  for (const [field, role] of Object.entries(fields)) {
+    const value = args[field];
+    const token = typeof value === "string" ? TOKEN.exec(value)?.[0] : void 0;
+    if (!token) continue;
+    const text = role === "version" ? `Date pseudonymis\xE9e re\xE7ue (\xAB ${token} \xBB) pour \xAB ${field} \xBB : la version du texte applicable \xE0 cette date ne peut pas \xEAtre demand\xE9e sans la date r\xE9elle, que seule la r\xE9hydratation par l'application peut fournir. Aucun appel n'a \xE9t\xE9 fait. Ne pas pr\xE9senter la version en vigueur aujourd'hui comme celle applicable \xE0 la date du dossier : pour la consulter, relancer sans \xAB ${field} \xBB, la d\xE9signer comme la version en vigueur \xE0 la date du jour et marquer \`[\xE0 v\xE9rifier]\` la version applicable \xE0 la date des faits ; ou demander la date \xE0 l'utilisateur.` : `Date pseudonymis\xE9e re\xE7ue (\xAB ${token} \xBB) pour le filtre \xAB ${field} \xBB : la p\xE9riode ne peut pas \xEAtre appliqu\xE9e sans la date r\xE9elle. Aucun appel n'a \xE9t\xE9 fait. Relancer sans ce filtre ou avec une p\xE9riode explicite (AAAA-MM-JJ) ; ne pas pr\xE9senter les r\xE9sultats comme limit\xE9s \xE0 la p\xE9riode du dossier, ni conclure \xE0 l'absence de r\xE9sultat sur cette p\xE9riode.`;
+    return { isError: true, content: [{ type: "text", text }] };
+  }
+  return void 0;
+}
+
 // ../../../packages/core/src/tools/get-code.ts
 function summarizeSections(sections, depth = 0, maxDepth = 2) {
   if (!sections || depth >= maxDepth) return [];
@@ -57570,6 +57584,8 @@ function registerGetCode(server, http) {
       }
     },
     async (args) => {
+      const pseudonymized = pseudonymizedDateResult(args, { date: "version" });
+      if (pseudonymized) return pseudonymized;
       const legitext = resolveLegitext(args.code);
       if (!legitext) {
         return {
@@ -57640,6 +57656,8 @@ function registerGetLoda(server, http) {
       }
     },
     async (args) => {
+      const pseudonymized = pseudonymizedDateResult(args, { date: "version" });
+      if (pseudonymized) return pseudonymized;
       const date5 = args.date ?? (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
       const raw = await http.post("/consult/lawDecree", { textId: args.textId, date: date5 });
       const parsed = ConsultTextResponseSchema.safeParse(raw);
@@ -58000,6 +58018,7 @@ function buildSearchRequest(input) {
 }
 
 // ../../../packages/core/src/tools/recherche.ts
+var RECHERCHE_DATES = { dateVersion: "version", dateDebut: "filtre", dateFin: "filtre" };
 var rechercheInputSchema = {
   query: external_exports.string().min(1).describe("Termes \xE0 rechercher (mots-cl\xE9s ou expression)."),
   fond: external_exports.enum(FOND_VALUES).default("ALL").describe("P\xE9rim\xE8tre de recherche."),
@@ -58033,6 +58052,8 @@ function registerRechercheTool(server, http, name) {
       inputSchema: rechercheInputSchema
     },
     async (args) => {
+      const pseudonymized = pseudonymizedDateResult(args, RECHERCHE_DATES);
+      if (pseudonymized) return pseudonymized;
       const resolvedCode = args.code ? canonicalCodeName(args.code) : args.code;
       let body;
       try {
@@ -58378,7 +58399,7 @@ function registerBofipAliases(server, http) {
         dateFin: external_exports.string().optional().describe("Date de fin (yyyy-mm-dd).")
       }
     },
-    (args) => callBofipRechercher(http, args)
+    async (args) => pseudonymizedDateResult(args, { dateDebut: "filtre", dateFin: "filtre" }) ?? callBofipRechercher(http, args)
   );
   server.registerTool(
     "bofip_consulter",
@@ -58631,7 +58652,7 @@ function formatJudilibreDecision(decision, idInput) {
 var CHAMBERS = ["pl", "mi", "civ1", "civ2", "civ3", "comm", "soc", "cr", "creun", "ordo", "allciv", "other"];
 var JURISDICTIONS = ["cc", "ca", "tj", "tcom"];
 var PUBLICATIONS = ["b", "r", "l", "c", "n"];
-var isoDate = external_exports.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date au format AAAA-MM-JJ");
+var isoDate = external_exports.string().regex(ISO_DATE_OR_TOKEN, "Date au format AAAA-MM-JJ");
 function textResult2(text, isError) {
   return {
     ...isError ? { isError } : {},
@@ -58705,7 +58726,7 @@ function registerJudilibreTools(server, config2, client = new JudilibreClient(co
         dateEnd: isoDate.optional().describe("D\xE9cisions rendues jusqu'\xE0 cette date (AAAA-MM-JJ).")
       }
     },
-    (args) => callJudilibreRecherche(client, args)
+    async (args) => pseudonymizedDateResult(args, { dateStart: "filtre", dateEnd: "filtre" }) ?? callJudilibreRecherche(client, args)
   );
   server.registerTool(
     "judilibre_get_decision",
@@ -60439,11 +60460,11 @@ function registerEurlexTools(server, client = new EurlexClient()) {
         resource_type: external_exports.enum(["any", "regulation", "directive", "decision", "case-law"]).default("any"),
         language: external_exports.enum(["FRA", "ENG", "DEU"]).default("FRA"),
         limit: external_exports.number().int().min(1).max(50).default(10),
-        date_from: external_exports.string().regex(/^\d{4}-\d{2}-\d{2}$/u).optional(),
-        date_to: external_exports.string().regex(/^\d{4}-\d{2}-\d{2}$/u).optional()
+        date_from: external_exports.string().regex(ISO_DATE_OR_TOKEN).optional(),
+        date_to: external_exports.string().regex(ISO_DATE_OR_TOKEN).optional()
       }
     },
-    (args) => callEurlexRecherche(client, args)
+    async (args) => pseudonymizedDateResult(args, { date_from: "filtre", date_to: "filtre" }) ?? callEurlexRecherche(client, args)
   );
   server.registerTool(
     "eurlex_consulter",
@@ -60479,12 +60500,12 @@ function registerEurlexTools(server, client = new EurlexClient()) {
       inputSchema: {
         celex_id: external_exports.string().min(5).describe("Identifiant CELEX de l'acte initial, par exemple 32016R0679."),
         language: external_exports.enum(["FRA", "ENG", "DEU"]).default("FRA"),
-        date: external_exports.string().regex(/^\d{4}-\d{2}-\d{2}$/u).optional(),
+        date: external_exports.string().regex(ISO_DATE_OR_TOKEN).optional(),
         mode: external_exports.enum(["list", "nearest", "fetch"]).default("list"),
         max_chars: external_exports.number().int().min(1e3).max(5e4).default(2e4)
       }
     },
-    (args) => callEurlexConsolidated(client, args)
+    async (args) => pseudonymizedDateResult(args, { date: "version" }) ?? callEurlexConsolidated(client, args)
   );
   server.registerTool(
     "eurlex_citations",
@@ -61095,9 +61116,9 @@ var BodaccClient = class {
 };
 
 // ../../../packages/core/src/tools/siren-input.ts
-var TOKEN = /\[[A-Z][A-Z0-9_]*_\d+\]/;
+var TOKEN2 = /\[[A-Z][A-Z0-9_]*_\d+\]/;
 function parseSirenInput(raw) {
-  const token = TOKEN.exec(raw);
+  const token = TOKEN2.exec(raw);
   if (token) return { kind: "pseudonymized", token: token[0] };
   const compact = raw.replace(/[\s.  ]/g, "");
   if (/^\d{9}$/.test(compact)) return { kind: "siren", siren: compact };
