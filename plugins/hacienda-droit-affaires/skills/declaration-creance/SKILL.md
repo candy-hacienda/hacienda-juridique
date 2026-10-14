@@ -100,7 +100,7 @@ Si `--siren` ou `--montant` absent : stopper et demander explicitement. Pas de v
 
 - [ ] `--siren` et `--montant` fournis (refus du défaut)
 - [ ] Profil cabinet bloc procédures collectives lu, seuil approbateur et qualité signataire identifiés
-- [ ] Lookup `bodacc_procedures` exécuté ; type procédure, date publication, mandataire renseignés ou flagués `[à vérifier]`
+- [ ] Lookup `bodacc_procedures` exécuté (ou, si le SIREN du débiteur est inventé, saut documenté dans la note du relecteur) ; type procédure, date publication, mandataire renseignés ou flagués `[à vérifier]`
 - [ ] Calcul forclusion vérifié (jours restants cohérents avec date du jour, délai 2 ou 4 mois selon `--etranger`)
 - [ ] **Prorogation appliquée** : si la forclusion tombe un samedi / dimanche / jour férié, la date retenue **ET affichée** est le 1er jour ouvrable suivant (art. 642 CPC), pas la date brute
 - [ ] **Certification** (créance sincère et exacte) présente dans le corps de la déclaration
