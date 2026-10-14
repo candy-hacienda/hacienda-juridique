@@ -205,10 +205,6 @@ aujourd'hui.** Avant de coller des données client, applique la politique de ton
 cabinet : retire ou remplace toi-même les noms, montants, IBAN et numéros de pièce
 qui identifient le client.
 
-- **`hacienda-ghost`** *(compagnon d'anonymisation — à venir)* : il anonymisera
-  automatiquement les identifiants sensibles (parties nommées, montants, IBAN, numéros
-  de pièce…) avant tout envoi au modèle.
-
 ## Un mot sur le périmètre
 
 Ce guide couvre **`hacienda-droit-affaires`**. Le plugin fait partie d'une marketplace

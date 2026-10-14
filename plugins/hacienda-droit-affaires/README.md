@@ -115,9 +115,9 @@ l'auto-activation des skills.
 | `/h-da:spa-review` | Revue de SPA / protocole de cession. Mode `--distressed` : cible en difficulté (période suspecte, passif non purgé). Mode `--pe --side=sponsor` : revue SPA côté sponsor (locked box, certain funds, rollover, MAC, W&I, overlay Private Equity). |
 | `/h-da:verifier-citations` | Vérification post-flight des citations. |
 
-## Plugin compagnon (à venir)
+## Données client
 
-`hacienda-ghost` — anonymisera les données personnelles avant envoi à Claude. D'ici là, le plugin n'anonymise rien : retirer soi-même les données qui identifient le client.
+Le plugin n'anonymise rien : retirer soi-même les données qui identifient le client avant de les transmettre.
 
 ## Parcours cabinet M&A
 
