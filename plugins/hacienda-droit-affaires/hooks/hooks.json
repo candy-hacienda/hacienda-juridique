@@ -1,3 +1,21 @@
 {
-  "hooks": {}
+  "description": "Injecte les règles transversales du CLAUDE.md du plugin (non chargé automatiquement)",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/inject-regles.cjs", "sorties"]
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/inject-regles.cjs", "garde-fous"]
+          }
+        ]
+      }
+    ]
+  }
 }
