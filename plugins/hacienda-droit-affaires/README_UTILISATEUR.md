@@ -20,8 +20,7 @@ gagner le temps du premier jet et de la relecture méthodique.
   de la Cour de cassation. Pas de droit générique traduit : les articles sont cités, et
   les sources non consultées sont marquées `[à vérifier]`.
 - **Confidentiel par conception.** Rien ne part vers un cloud tiers au-delà de l'usage
-  normal de Cowork. Les identifiants sensibles peuvent être anonymisés avant tout envoi
-  au modèle (voir *Confidentialité* plus bas).
+  normal de Cowork (voir *Confidentialité* plus bas pour les données client).
 - **Honnête.** Toute sortie est un **brouillon soumis à validation humaine** — jamais
   « prêt à signer ». Les points qui appellent ton jugement d'avocat sont signalés
   `[review]` en ligne.
@@ -42,8 +41,7 @@ archive). Pour l'installer dans ton Cowork :
 
 Le plugin est alors **enregistré localement sur ta machine** et **disponible
 immédiatement** — pas d'étape d'activation supplémentaire. Rien ne quitte ton poste
-pendant l'installation. Si tu utilises aussi `hacienda-ghost` pour l'anonymisation,
-installe-le de la même façon.
+pendant l'installation.
 
 *(Guide officiel Cowork : [Utiliser les plugins dans Cowork](https://support.claude.com/fr/articles/13837440-utiliser-les-plugins-dans-cowork).)*
 
@@ -67,8 +65,7 @@ exécution : sans lui, les sorties restent génériques.
 /h-da:cas j'ai un dossier de reprise d'une société en difficulté, par où je commence ?
 ```
 
-`cas` est ta **porte d'entrée**. Décris ta situation en langage naturel — il trie, te
-rappelle d'activer l'anonymisation avant de coller des données client, et t'amène au
+`cas` est ta **porte d'entrée**. Décris ta situation en langage naturel — il trie et t'amène au
 bon skill. Si tu sais déjà quoi faire, lance directement le skill (« révise ce
 contrat », « rédige une mise en demeure »).
 
@@ -202,13 +199,15 @@ une tâche planifiée dans Claude Desktop — demande-le explicitement, l'agent
 
 ## Confidentialité
 
-<!-- [review] — Candy : caler le statut exact de hacienda-ghost (à venir / bêta / optionnel) avant diffusion. -->
+Le plugin est installé en local, mais ce que tu lui donnes (faits, pièces, contrats) est
+envoyé au modèle comme dans toute conversation Cowork. **Le plugin n'anonymise rien
+aujourd'hui.** Avant de coller des données client, applique la politique de ton
+cabinet : retire ou remplace toi-même les noms, montants, IBAN et numéros de pièce
+qui identifient le client.
 
-Le plugin tourne en local. Pour les documents les plus sensibles :
-
-- **Avec `hacienda-ghost`** *(compagnon d'anonymisation — statut à préciser)* : les
-  identifiants sensibles (parties nommées, montants > 10 k€, IBAN, numéros de pièce…)
-  sont anonymisés **automatiquement** avant tout envoi au modèle.
+- **`hacienda-ghost`** *(compagnon d'anonymisation — à venir)* : il anonymisera
+  automatiquement les identifiants sensibles (parties nommées, montants, IBAN, numéros
+  de pièce…) avant tout envoi au modèle.
 
 ## Un mot sur le périmètre
 

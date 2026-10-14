@@ -85,7 +85,7 @@ l'auto-activation des skills.
 | --- | --- |
 | `/h-da:analyser-rupture-brutale` | Analyse du risque de rupture brutale. |
 | `/h-da:asset-vs-share-distress` | Arbitrage de structuration côté repreneur pour une cible en difficulté : titres vs actifs, responsabilité repreneur (période suspecte, passif), routage vers le bon playbook. |
-| `/h-da:cas` | Point de départ : décris ton dossier, je trie et je route vers le bon skill (rappelle l'anonymisation avant les données). |
+| `/h-da:cas` | Point de départ : décris ton dossier, je trie et je route vers le bon skill. |
 | `/h-da:cession-actifs-isoles` | Playbook côté repreneur : construire et défendre une offre d'acquisition d'actifs isolés (fonds, marques, stocks) en LJ, hors plan de cession (L.642-19). |
 | `/h-da:cgv-generator` | Génération assistée de CGV/CGU. |
 | `/h-da:closing-checklist-fr` | Checklist signing, closing et post-closing. Mode `--pe` : lentille closing LBO côté sponsor (funds flow / sources & uses, CP financement & certain funds, mécanique de closing day-1, security package & assistance financière L.225-216 C.com., adhésion rollover & post-closing PE). |
@@ -115,9 +115,9 @@ l'auto-activation des skills.
 | `/h-da:spa-review` | Revue de SPA / protocole de cession. Mode `--distressed` : cible en difficulté (période suspecte, passif non purgé). Mode `--pe --side=sponsor` : revue SPA côté sponsor (locked box, certain funds, rollover, MAC, W&I, overlay Private Equity). |
 | `/h-da:verifier-citations` | Vérification post-flight des citations. |
 
-## Plugin compagnon recommandé
+## Plugin compagnon (à venir)
 
-`hacienda-ghost` — anonymise les données PII avant envoi à Claude.
+`hacienda-ghost` — anonymisera les données personnelles avant envoi à Claude. D'ici là, le plugin n'anonymise rien : retirer soi-même les données qui identifient le client.
 
 ## Parcours cabinet M&A
 
