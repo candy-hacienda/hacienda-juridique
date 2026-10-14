@@ -43,6 +43,7 @@ const distributionDirectories = new Set([
   "commands",
   "hooks",
   "references",
+  "scripts",
   "skills"
 ]);
 

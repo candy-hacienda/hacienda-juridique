@@ -56,7 +56,10 @@ Chaque dossier plugin exporté conserve :
 - `README.md` ;
 - `skills/**/SKILL.md` et leurs références ;
 - `agents/*.md` quand présents ;
+- `commands/**/*.md` quand présents (commandes `/h-da:…`) ;
 - `hooks/hooks.json` ;
+- `scripts/` : les scripts que `hooks/hooks.json` référence (ex. `scripts/inject-regles.cjs`,
+  qui injecte les règles du `CLAUDE.md`, non chargé automatiquement) ;
 - `mcp-server/dist/mcpb-index.cjs` et `mcp-server/package.json` uniquement
   quand le plugin déclare un serveur stdio embarqué.
 
