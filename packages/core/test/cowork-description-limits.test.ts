@@ -3,6 +3,8 @@ import { dirname, extname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
+import { frontmatterText } from "./frontmatter-text";
+
 // Cowork refuse à l'installation un plugin qui dépasse ces longueurs
 // (« Plugin failed validation »), alors que `claude plugin validate` ne les
 // contrôle pas. La limite des skills est aussi celle du format standard utilisé
@@ -13,24 +15,6 @@ const COMMAND_DESCRIPTION_MAX = 500;
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
 const pluginsDir = resolve(root, "plugins");
-
-/** Valeur d'une clé du frontmatter, y compris en bloc replié (`key: >`). */
-export function frontmatterText(content: string, key: string): string | undefined {
-  const stripped = content.replace(/^﻿/, "").replace(/\r\n/g, "\n");
-  const frontmatter = stripped.match(/^---\n([\s\S]*?)\n---/)?.[1];
-  if (!frontmatter) return undefined;
-  const lines = frontmatter.split("\n");
-  const start = lines.findIndex((line) => line.startsWith(`${key}:`));
-  if (start === -1) return undefined;
-  const inline = lines[start].slice(key.length + 1).trim();
-  if (!/^[>|]-?$/.test(inline)) return inline.replace(/^["']|["']$/g, "");
-  const block: string[] = [];
-  for (const line of lines.slice(start + 1)) {
-    if (line.trim() && !line.startsWith(" ")) break;
-    block.push(line.trim());
-  }
-  return block.filter(Boolean).join(" ");
-}
 
 function markdownFiles(dir: string): string[] {
   if (!existsSync(dir)) return [];
@@ -55,6 +39,22 @@ describe("limites de longueur des descriptions (installation Cowork)", () => {
 
     if ((manifest.description ?? "").length > PLUGIN_DESCRIPTION_MAX) {
       overLimit.push(`plugin.json (${manifest.description!.length} > ${PLUGIN_DESCRIPTION_MAX})`);
+    }
+    // La même description figure dans les marketplaces (racine et plugin).
+    for (const marketplacePath of [
+      resolve(root, ".claude-plugin/marketplace.json"),
+      resolve(pluginDir, ".claude-plugin/marketplace.json")
+    ]) {
+      if (!existsSync(marketplacePath)) continue;
+      const marketplace = JSON.parse(readFileSync(marketplacePath, "utf8")) as {
+        plugins?: Array<{ name?: string; description?: string }>;
+      };
+      for (const entry of marketplace.plugins ?? []) {
+        const length = entry.description?.length ?? 0;
+        if (entry.name === plugin && length > PLUGIN_DESCRIPTION_MAX) {
+          overLimit.push(`${marketplacePath} (${length} > ${PLUGIN_DESCRIPTION_MAX})`);
+        }
+      }
     }
     for (const file of markdownFiles(resolve(pluginDir, "skills"))) {
       if (!file.endsWith("SKILL.md")) continue;
