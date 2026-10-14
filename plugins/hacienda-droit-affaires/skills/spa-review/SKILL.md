@@ -446,8 +446,6 @@ non traités par une source primaire consultée restent `[à vérifier]`.
 3. **Compléter les faits** — je liste les questions à poser à l'équipe deal, au client ou à la contrepartie.
 4. **Surveiller et attendre** — j'ajoute le sujet au tracker du dossier avec date de revisite.
 5. **Autre** — précise.
-
-[Ce skill a traité {N} mentions identifiantes. Pour anonymiser automatiquement avant envoi à Claude, installer hacienda-ghost.](https://hacienda.diy/ghost)
 ```
 
 ### Modes courts
