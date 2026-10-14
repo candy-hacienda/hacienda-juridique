@@ -1,9 +1,8 @@
 ---
 description: >
-  Post-flight de validation juridique. Pour chaque article cite dans une
-  sortie skill (art. NNN C.civ, L.NNN-N C.com., etc.), interroge Legifrance
-  via packages/core pour verifier existence + version en vigueur +
-  non-abrogation. Annote la sortie. Mode degrade si PISTE non configure.
+  Vérifie sur Légifrance chaque article cité dans un brouillon : existence,
+  version en vigueur, abrogation éventuelle. Annote le brouillon et signale si la
+  connexion à Légifrance n'est pas configurée.
 argument-hint: "[sortie ou liste de citations à vérifier]"
 ---
 

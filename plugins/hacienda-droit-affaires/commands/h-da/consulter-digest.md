@@ -1,9 +1,8 @@
 ---
 description: >
-  Lit et présente le digest de veille juridique produit par l'agent
-  veille-jurisprudence. Permet de filtrer par domaine de pratique, par date
-  ou par criticité d'impact. Skill de lecture — ne produit pas d'analyse
-  juridique nouvelle.
+  Affiche le digest de veille juridique (nouveaux textes, arrêts de la chambre
+  commerciale), filtrable par domaine, par date ou par impact. Lecture seule, sans
+  nouvelle analyse.
 argument-hint: "[domaine, période, criticité]"
 ---
 

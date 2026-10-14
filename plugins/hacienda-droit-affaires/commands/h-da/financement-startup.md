@@ -1,10 +1,8 @@
 ---
 description: >
-  Conseil sur les instruments de financement de la startup : BSPCE, BSA,
-  obligations convertibles, augmentation de capital. Mode --comparer (choix
-  d'instrument) et --review (revue d'une term sheet de levée). Renvoie vers
-  pacte-associes-review pour les clauses de pacte. Ne donne aucun conseil
-  fiscal. Brouillon soumis à validation humaine (avocat).
+  Aide à choisir un instrument de financement de startup (BSPCE, BSA, obligations
+  convertibles, augmentation de capital) ou relit une term sheet de levée. Aucun
+  conseil fiscal. Brouillon soumis à validation de l'avocat.
 argument-hint: "[--comparer ou --review, instrument, term sheet]"
 ---
 

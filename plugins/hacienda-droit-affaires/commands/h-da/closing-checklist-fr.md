@@ -1,10 +1,9 @@
 ---
 description: >
-  Génère une checklist de closing M&A adaptée au droit français : conditions
-  suspensives à lever, séquençage signing/closing, documentation à réunir,
-  formalités post-closing (dépôt au greffe, registre de mouvements de titres,
-  droits d'enregistrement). Brouillon soumis à validation humaine (avocat).
-  Mode `--pe` : lentille closing LBO (funds flow / sources & uses, mécanique day-1, assistance financière).
+  Établit la checklist de closing d'une opération M&A en droit français :
+  conditions suspensives, séquençage signing/closing, documents à réunir,
+  formalités post-closing. Option LBO (funds flow, assistance financière).
+  Brouillon soumis à validation de l'avocat.
 argument-hint: "[deal, side, conditions suspensives, calendrier] [--pe --side=sponsor|cedant]"
 ---
 

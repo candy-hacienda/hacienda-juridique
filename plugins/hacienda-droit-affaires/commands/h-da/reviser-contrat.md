@@ -1,11 +1,9 @@
 ---
 description: >
-  Revue d'un contrat commercial entrant contre le playbook du cabinet : CGV,
-  distribution, franchise, prestation de services, bail commercial, SPA, NDA
-  commercial. Analyse clause par clause, génère liste de points (issues list)
-  avec criticité 🟢/🟡/🟠/🔴, identifie risques juridiques avec articles
-  applicables et jurisprudence Judilibre. Renvoie vers PI:contrats-pi si le
-  contrat est PI-centric. Brouillon soumis à validation humaine (avocat).
+  Relit clause par clause un contrat commercial reçu (CGV, distribution,
+  franchise, prestation, bail commercial, SPA, NDA) : risques classés par
+  criticité, articles et jurisprudence, liste de points à négocier. Brouillon
+  soumis à validation de l'avocat.
 argument-hint: "[contrat, type, side, playbook cabinet]"
 ---
 

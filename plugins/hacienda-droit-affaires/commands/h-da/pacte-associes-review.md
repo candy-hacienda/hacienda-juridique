@@ -1,11 +1,9 @@
 ---
 description: >
-  Revue d'un pacte d'associés contre le playbook du cabinet : préemption,
-  agrément, inaliénabilité, drag/tag-along, anti-dilution, good/bad leaver,
-  promesses croisées, non-concurrence des associés, droits de véto, clauses
-  d'information et de liquidité. Triage par criticité, liste de points de
-  négociation. Renvoie vers PI:contrats-pi si apports/licences PI substantiels.
-  Brouillon soumis à validation humaine (avocat).
+  Relit un pacte d'associés : préemption, agrément, inaliénabilité, sortie
+  conjointe ou forcée, anti-dilution, leaver, non-concurrence, veto. Points
+  classés par criticité et liste de points à négocier. Brouillon soumis à
+  validation de l'avocat.
 argument-hint: "[pacte, side, playbook ou points sensibles] [--pe] [--side=sponsor|management]"
 ---
 

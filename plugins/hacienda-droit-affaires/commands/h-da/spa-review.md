@@ -1,10 +1,9 @@
 ---
 description: >
-  Revue d'un SPA / protocole de cession / acte de cession M&A de droit
-  français. Analyse l'architecture du deal, prix, conditions suspensives,
-  covenants d'interim, MAC, disclosure, garanties, indemnisation, renvois GAP,
-  cohérence DD et readiness signing/closing. Side acquéreur ou cédant
-  obligatoire. Brouillon soumis à validation avocat M&A.
+  Relit un SPA ou un acte de cession M&A de droit français, côté acquéreur ou
+  cédant : prix, conditions suspensives, gestion intérimaire, MAC, garanties,
+  indemnisation, préparation du signing et du closing. Brouillon soumis à
+  validation de l'avocat.
 argument-hint: "[SPA/protocole, side, data-room, points de négociation]"
 ---
 

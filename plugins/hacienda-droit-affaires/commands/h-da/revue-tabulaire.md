@@ -1,10 +1,8 @@
 ---
 description: >
-  Extraction structurée de N documents en parallèle vers un tableau, colonnes
-  paramétrables. Brique atomique : remplace la revue manuelle "10 NDA à
-  passer en revue". Réutilisée comme building block par
-  due-diligence-dataroom (v1.1). Exemple : extraire durée + non-conc + loi
-  + juridiction sur 12 NDA d'un coup.
+  Extrait les mêmes informations de plusieurs documents dans un tableau aux
+  colonnes choisies, par exemple la durée, la loi applicable et la juridiction de
+  12 NDA d'un coup. Brouillon soumis à validation de l'avocat.
 argument-hint: "[documents, colonnes à extraire, format de sortie]"
 ---
 

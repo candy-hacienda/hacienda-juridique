@@ -1,12 +1,8 @@
 ---
 description: >
-  Revue de Garantie d'Actif et de Passif (GAP) — spécificité française sans
-  équivalent direct R&W US. Couvre 5 axes : (1) périmètre garantie, (2)
-  mécanique financière (plafond, franchise, panier, durée), (3) procédure de
-  mise en œuvre, (4) clauses sensibles side-dependent (knowledge qualifier,
-  best knowledge, garantie de la garantie), (5) confrontation findings DD.
-  Side cédant ou acquéreur obligatoire. Brouillon, validation humaine (avocat) M&A
-  obligatoire.
+  Relit une garantie d'actif et de passif (GAP), côté cédant ou acquéreur :
+  périmètre, plafond, franchise, durée, mise en œuvre, clauses sensibles,
+  cohérence avec la due diligence. Brouillon soumis à validation de l'avocat.
 argument-hint: "[GAP, side cédant/acquéreur, findings DD]"
 ---
 

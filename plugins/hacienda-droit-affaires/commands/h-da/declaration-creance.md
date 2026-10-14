@@ -1,14 +1,8 @@
 ---
 description: >
-  Rédige une déclaration de créance art. L.622-24 C.com. dans le cadre d'une
-  procédure collective (sauvegarde, redressement, liquidation). Calcule
-  automatiquement la date de forclusion (2 mois post-publication BODACC,
-  4 mois si créancier hors UE/EEE). Lookup BODACC via
-  `bodacc_procedures` de `@hacienda/core` pour récupérer
-  type de procédure, date jugement, date publication et mandataire désigné
-  (lus sur l'avis d'ouverture désigné par l'outil, fallback `[à vérifier]`).
-  Format conforme aux usages mandataire judiciaire. Brouillon, validation
-  avocat/mandataire obligatoire.
+  Côté créancier : rédige la déclaration de créance dans une procédure collective
+  (art. L.622-24 C.com.) et calcule la date limite à partir de l'annonce au
+  BODACC, avec le mandataire désigné. Brouillon soumis à validation de l'avocat.
 argument-hint: "[SIREN débiteur, créance, jugement, publication BODACC ; --releve-forclusion pour la requête L.622-26]"
 ---
 

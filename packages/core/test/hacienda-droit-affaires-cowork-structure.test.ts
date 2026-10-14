@@ -260,9 +260,10 @@ describe("hacienda droit affaires cowork packaging", () => {
       const skillContent = readFileSync(skillFile, "utf8");
       const commandContent = readFileSync(commandFile, "utf8");
 
-      expect(frontmatterValue(commandContent, "description"), skillName).toBe(
-        frontmatterValue(skillContent, "description")
-      );
+      // Description propre à la commande, courte (palette, limite Cowork de 500
+      // caractères contrôlée par cowork-description-limits.test.ts) : elle ne
+      // recopie plus celle du skill, qui sert au déclenchement.
+      expect(frontmatterValue(commandContent, "description"), skillName).toBeTruthy();
       expect(frontmatterValue(commandContent, "argument-hint"), skillName).toBe(
         frontmatterValue(skillContent, "argument-hint")
       );
