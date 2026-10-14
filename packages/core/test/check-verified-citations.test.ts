@@ -45,6 +45,22 @@ describe("check-verified-citations — faux positifs connus", () => {
       "**Fondement :** le régime de déclaration des créances (L.622-24 à L.622-33) s'y applique par renvoi de l'art. L.631-14 `[Légifrance]`.";
     expect(suspects(line, ["L622-24", "L631-14"])).toEqual([]);
   });
+
+  it("ignore la borne basse d'une plage d'articles", () => {
+    const line = "par renvoi de **L.631-14** `[Légifrance]`. L.631-14 renvoie à L.622-13 à L.622-33.";
+    expect(suspects(line, ["L631-14"])).toEqual([]);
+  });
+
+  it("ignore les numéros de facture (F-1142, F-2025-1198)", () => {
+    const line =
+      "| Intérêts (art. 8 CGV) | Taux légal (arrêté `[Légifrance]`) : F-1142 : 43 j ; F-2025-1198 : 43 j | 502 € |";
+    expect(suspects(line, [])).toEqual([]);
+  });
+
+  it("ignore un article dont la cellule voisine d'un tableau dit [à vérifier]", () => {
+    const line = "| Légifrance ✓ | L.441-10 C.com. | [à vérifier] |";
+    expect(suspects(line, [])).toEqual([]);
+  });
 });
 
 describe("check-verified-citations — vrais défauts", () => {
@@ -55,6 +71,11 @@ describe("check-verified-citations — vrais défauts", () => {
 
   it("signale un article vérifié non lu même après une dénégation sur un autre article", () => {
     const line = "L.622-17 `[à vérifier]` ; L.622-21 `[Légifrance]` interdit les poursuites.";
+    expect(suspects(line, [])).toEqual(["L622-21"]);
+  });
+
+  it("signale dans un tableau l'article étiqueté [Légifrance] malgré une autre ligne à vérifier", () => {
+    const line = "| L.622-17 | [à vérifier] | L.622-21 | [Légifrance] |";
     expect(suspects(line, [])).toEqual(["L622-21"]);
   });
 
