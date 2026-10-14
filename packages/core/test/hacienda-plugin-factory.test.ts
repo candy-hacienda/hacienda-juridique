@@ -279,6 +279,8 @@ describe("hacienda plugin factory create CLI", () => {
     const droitAffairesEntries = readZipEntryNames(droitAffairesZip);
 
     expect(droitAffairesEntries).toContain("mcp-server/dist/mcpb-index.cjs");
+    expect(droitAffairesEntries).toContain("commands/h-da/declaration-creance.md");
+    expect(droitAffairesEntries.some((entry) => entry.startsWith("evals/"))).toBe(false);
     expect(droitAffairesEntries.some((entry) => entry === "manifest.json")).toBe(false);
     expect(droitAffairesEntries.some((entry) => entry.startsWith("logs/"))).toBe(false);
     expect(droitAffairesEntries.some((entry) => entry.startsWith("mcp-server/src/"))).toBe(false);

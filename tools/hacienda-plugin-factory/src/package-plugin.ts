@@ -40,6 +40,7 @@ const defaultOutputDir = resolve(repoRoot, "dist-pkg/cowork-marketplace");
 const distributionDirectories = new Set([
   ".claude-plugin",
   "agents",
+  "commands",
   "hooks",
   "references",
   "skills"
