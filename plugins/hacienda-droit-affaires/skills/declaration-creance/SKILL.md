@@ -100,7 +100,7 @@ Si `--siren` ou `--montant` absent : stopper et demander explicitement. Pas de v
 
 - [ ] `--siren` et `--montant` fournis (refus du défaut)
 - [ ] Profil cabinet bloc procédures collectives lu, seuil approbateur et qualité signataire identifiés
-- [ ] Lookup `bodacc_procedures` exécuté ; type procédure, date publication, mandataire renseignés ou flagués `[à vérifier]`
+- [ ] Lookup `bodacc_procedures` exécuté (ou, si le SIREN du débiteur est inventé, saut documenté dans la note du relecteur) ; type procédure, date publication, mandataire renseignés ou flagués `[à vérifier]`
 - [ ] Calcul forclusion vérifié (jours restants cohérents avec date du jour, délai 2 ou 4 mois selon `--etranger`)
 - [ ] **Prorogation appliquée** : si la forclusion tombe un samedi / dimanche / jour férié, la date retenue **ET affichée** est le 1er jour ouvrable suivant (art. 642 CPC), pas la date brute
 - [ ] **Certification** (créance sincère et exacte) présente dans le corps de la déclaration
@@ -147,7 +147,7 @@ Structurer la sortie avec : faits retenus, droit applicable, analyse, incertitud
    - **Tribunal** — `avis_ouverture.tribunal` ; **numéro RG** — rarement publié : `[à vérifier]` s'il n'est pas dans le complément.
    - Signaler toute note de l'outil (plusieurs avis d'ouverture, rectificatif) dans la note du relecteur.
 4. Si aucune procédure trouvée pour ce SIREN : stopper et demander confirmation (le débiteur est-il bien en procédure ? Le SIREN est-il exact ?).
-   Exception, dossier fictif : pas de lookup ni d'arrêt. Reprendre les données de procédure fournies, à confirmer sur l'avis, et poursuivre (lecture des articles comprise, étape 4 bis).
+   Exception, SIREN du débiteur inventé (dossier fictif) : pas de lookup ni d'arrêt. Reprendre les données de procédure fournies, à confirmer sur l'avis, et poursuivre (lecture des articles comprise, étape 4 bis). Un SIREN réel s'interroge toujours, même si d'autres parties du dossier sont fictives.
 
 Tags de provenance : `[BODACC]` pour tout champ extrait, `[à vérifier]` pour tout champ non parsable.
 
@@ -245,10 +245,13 @@ cite est lu avant la rédaction. Un article hors tableau cité en cours de
 rédaction se lit aussi, ou reste `[à vérifier]`.
 
 **Dossier fictif (formation, test, persona) : la lecture a lieu quand même.**
-Les parties et les SIREN sont inventés, le droit ne l'est pas. Sauter BODACC et
-Pappers sur un SIREN fictif, en le disant dans la note du relecteur ; lire les
-articles ci-dessus comme pour un dossier client. « Le dossier est fictif » ne
-justifie jamais de laisser un article en `[à vérifier]` quand Légifrance répond.
+Les parties sont inventées, le droit ne l'est pas. Ce qui se saute, c'est le
+registre sur un **SIREN inventé** (marqué comme tel, ex. `SIREN-FICTIF-…`, ou
+sans ses 9 chiffres), pas le dossier entier : un débiteur au SIREN réel s'interroge sur
+BODACC même si le créancier est fictif. Dire dans la note du relecteur ce qui
+a été sauté et pourquoi ; lire les articles ci-dessus comme pour un dossier
+client. « Le dossier est fictif » ne justifie jamais de laisser un article en
+`[à vérifier]` quand Légifrance répond.
 
 Seuls les articles effectivement ramenés par l'outil reçoivent `[Légifrance]`
 (CLAUDE.md §2). La note du relecteur porte deux lignes, toujours présentes :
