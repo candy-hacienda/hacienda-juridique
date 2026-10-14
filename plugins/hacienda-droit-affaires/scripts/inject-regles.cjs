@@ -22,7 +22,10 @@ function main() {
   const text = readFileSync(join(root, "CLAUDE.md"), "utf8").replace(/\r\n/g, "\n");
   const sections = text.split(/^(?=## \d+\. )/m).filter((block) => /^## \d+\. /.test(block));
   const kept = sections.filter((block) => part.sections.includes(Number(block.match(/^## (\d+)\./)[1])));
-  if (kept.length === 0) return;
+  if (kept.length === 0) {
+    process.stderr.write("inject-regles : règles non injectées (aucune section trouvée dans CLAUDE.md)\n");
+    return;
+  }
   const intro =
     `Règles de travail du plugin Hacienda Droit des Affaires (${part.title}), ` +
     "extraites du CLAUDE.md du plugin. Ce sont les conventions de ce plugin pour tous ses skills.\n\n";
