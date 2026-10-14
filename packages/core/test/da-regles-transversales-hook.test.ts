@@ -52,6 +52,7 @@ describe("hook SessionStart des règles transversales (droit des affaires)", () 
     const missing = inject("sorties", resolve(root, "plugins/hacienda-sources-officielles"));
     expect(missing.status).toBe(0);
     expect(missing.stdout).toBe("");
+    expect(missing.stderr).toContain("règles non injectées");
     const unknown = inject("inconnue");
     expect(unknown.status).toBe(0);
     expect(unknown.stdout).toBe("");

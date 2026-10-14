@@ -35,6 +35,8 @@ function main() {
 
 try {
   main();
-} catch {
-  // Hook sans effet plutôt que session bloquée.
+} catch (error) {
+  // Hook sans effet plutôt que session bloquée, mais pas en silence : un
+  // diagnostic sur stderr, sans toucher au code de sortie.
+  process.stderr.write(`inject-regles : règles non injectées (${error.message})\n`);
 }
