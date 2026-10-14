@@ -147,6 +147,7 @@ Structurer la sortie avec : faits retenus, droit applicable, analyse, incertitud
    - **Tribunal** — `avis_ouverture.tribunal` ; **numéro RG** — rarement publié : `[à vérifier]` s'il n'est pas dans le complément.
    - Signaler toute note de l'outil (plusieurs avis d'ouverture, rectificatif) dans la note du relecteur.
 4. Si aucune procédure trouvée pour ce SIREN : stopper et demander confirmation (le débiteur est-il bien en procédure ? Le SIREN est-il exact ?).
+   Exception, dossier fictif : pas de lookup ni d'arrêt. Reprendre les données de procédure fournies, à confirmer sur l'avis, et poursuivre (lecture des articles comprise, étape 4 bis).
 
 Tags de provenance : `[BODACC]` pour tout champ extrait, `[à vérifier]` pour tout champ non parsable.
 
@@ -242,6 +243,12 @@ format `L622-24`) :
 La colonne de droite n'est pas optionnelle : tout article du tableau que la note
 cite est lu avant la rédaction. Un article hors tableau cité en cours de
 rédaction se lit aussi, ou reste `[à vérifier]`.
+
+**Dossier fictif (formation, test, persona) : la lecture a lieu quand même.**
+Les parties et les SIREN sont inventés, le droit ne l'est pas. Sauter BODACC et
+Pappers sur un SIREN fictif, en le disant dans la note du relecteur ; lire les
+articles ci-dessus comme pour un dossier client. « Le dossier est fictif » ne
+justifie jamais de laisser un article en `[à vérifier]` quand Légifrance répond.
 
 Seuls les articles effectivement ramenés par l'outil reçoivent `[Légifrance]`
 (CLAUDE.md §2). La note du relecteur porte deux lignes, toujours présentes :
