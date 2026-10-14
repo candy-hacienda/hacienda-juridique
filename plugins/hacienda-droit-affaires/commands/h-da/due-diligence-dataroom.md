@@ -1,10 +1,9 @@
 ---
 description: >
-  Analyse de data-room M&A sur 7 thèmes (corporate, contrats, social, PI,
-  fiscal, contentieux, RGPD). S'appuie sur revue-tabulaire pour l'extraction
-  multi-documents. Produit un rapport structuré par thème, une grille de
-  matérialité, une Q&A list et des recommandations pour la GAP. Brouillon
-  soumis à validation humaine (avocat).
+  Analyse une data-room M&A sur 7 thèmes (corporate, contrats, social, PI, fiscal,
+  contentieux, RGPD) : rapport par thème, grille de matérialité, liste de
+  questions, recommandations pour la GAP. Brouillon soumis à validation de
+  l'avocat.
 argument-hint: "[dataroom, side, thèmes, seuil de matérialité]"
 ---
 

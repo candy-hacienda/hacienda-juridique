@@ -5,6 +5,8 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, extname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { frontmatterText } from "./frontmatter-text";
+
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
 const pluginRoot = resolve(root, "plugins/hacienda-droit-affaires");
 const droitAffairesCommandNamespace = "h-da";
@@ -260,9 +262,12 @@ describe("hacienda droit affaires cowork packaging", () => {
       const skillContent = readFileSync(skillFile, "utf8");
       const commandContent = readFileSync(commandFile, "utf8");
 
-      expect(frontmatterValue(commandContent, "description"), skillName).toBe(
-        frontmatterValue(skillContent, "description")
-      );
+      // Description propre à la commande, courte (palette, limite Cowork de 500
+      // caractères contrôlée par cowork-description-limits.test.ts) : elle ne
+      // recopie pas celle du skill, qui sert au déclenchement.
+      const commandDescription = frontmatterText(commandContent, "description");
+      expect(commandDescription, skillName).toBeTruthy();
+      expect(commandDescription, skillName).not.toBe(frontmatterText(skillContent, "description"));
       expect(frontmatterValue(commandContent, "argument-hint"), skillName).toBe(
         frontmatterValue(skillContent, "argument-hint")
       );

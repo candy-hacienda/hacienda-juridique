@@ -1,10 +1,8 @@
 ---
 description: >
-  Onboarding du plugin droit des affaires : configure le profil cabinet (side
-  principal M&A / procédures collectives / mixte), vérifie les connexions aux
-  sources externes (Légifrance, Pappers, BODACC, Judilibre), réutilise un
-  profil cabinet partagé s'il existe à ~/.claude/plugins/config/hacienda-juridique/company-profile.md.
-  Mode --check-integrations pour relancer uniquement le diagnostic.
+  À lancer en premier : configure le profil du cabinet (activité dominante,
+  posture) et vérifie la connexion aux sources (Légifrance, BODACC, Judilibre,
+  Pappers). Relançable pour un simple diagnostic des connexions.
 argument-hint: "[--redo ou --check-integrations]"
 ---
 

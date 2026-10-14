@@ -1,9 +1,8 @@
 ---
 description: >
-  Gouvernance d'assemblée : mode --convocation (génère une convocation d'AGO
-  ou d'AGE conforme aux délais et mentions obligatoires) et mode --pv (génère
-  ou révise un procès-verbal d'assemblée). Adapte quorum, majorité et
-  formalisme à la forme sociale. Brouillon soumis à validation humaine (avocat).
+  Rédige la convocation d'une assemblée (AGO ou AGE) ou son procès-verbal, avec
+  quorum, majorité et formalités adaptés à la forme sociale. Brouillon soumis à
+  validation de l'avocat.
 argument-hint: "[--convocation ou --pv, forme sociale, décisions]"
 ---
 

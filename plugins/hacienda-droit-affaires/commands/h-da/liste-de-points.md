@@ -1,10 +1,8 @@
 ---
 description: >
-  Génère une issues list (liste de points à négocier) à partir d'une analyse
-  de contrat. Appelable directement OU comme composant interne par
-  reviser-contrat / gap-review. Format tableau standardisé criticité
-  décroissante 🔴 → 🟢, avec position souhaitée et formulation alternative
-  pour chaque point.
+  Transforme une analyse de contrat en liste de points à négocier (issues list),
+  classés par criticité, avec la position souhaitée et une formulation alternative
+  pour chaque point. Brouillon soumis à validation de l'avocat.
 argument-hint: "[contrat ou analyse source, position client]"
 ---
 

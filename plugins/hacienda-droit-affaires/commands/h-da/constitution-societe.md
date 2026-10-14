@@ -1,9 +1,8 @@
 ---
 description: >
-  Assistance à la constitution de société : mode --comparer (aide au choix
-  de forme SAS/SARL/SA) et mode --draft (brouillon assisté de statuts, chaque
-  point de décision tagué [review]). Détecte la bifurcation acte sous seing
-  privé vs notarié obligatoire. Brouillon soumis à validation humaine (avocat)/notaire.
+  Aide à choisir la forme sociale (SAS, SARL, SA) ou rédige un projet de statuts,
+  chaque point de décision étant signalé [review] ; indique quand un acte notarié
+  est obligatoire. Brouillon soumis à validation de l'avocat ou du notaire.
 argument-hint: "[--comparer ou --draft, forme envisagée, associés, activité]"
 ---
 

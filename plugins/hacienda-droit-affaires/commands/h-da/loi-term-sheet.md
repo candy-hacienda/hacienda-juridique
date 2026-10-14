@@ -1,10 +1,8 @@
 ---
 description: >
-  Revue ou rédaction de lettre d'intention / LOI / term sheet M&A. Distingue
-  les clauses binding des clauses non-binding, vérifie exclusivité,
-  confidentialité, bonne foi des pourparlers (1104, 1112 C.civ), conditions
-  suspensives esquissées et calendrier. Mode --review et --draft. Brouillon
-  soumis à validation humaine (avocat).
+  Relit ou rédige une lettre d'intention (LOI) ou une term sheet M&A : clauses
+  engageantes ou non, exclusivité, confidentialité, bonne foi des pourparlers,
+  conditions et calendrier. Brouillon soumis à validation de l'avocat.
 argument-hint: "[--review ou --draft, NBO/LOI/term sheet, side]"
 ---
 

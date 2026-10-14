@@ -28,7 +28,7 @@
     {
       "name": "hacienda-droit-affaires",
       "source": "./plugins/hacienda-droit-affaires",
-      "description": "Droit des affaires français : contrats commerciaux (revue, NDA, CGV/CGU, mise en demeure, rupture brutale L.442-1 II), vie sociale (constitution, assemblées, pacte d'associés, financement startup), M&A de la LOI au closing avec lentille Private Equity / LBO (DD red flags, SPA, GAP, management package), entreprises en difficulté côté créancier, dirigeant et repreneur (prévention, cessation des paiements, déclaration de créance, pre-pack, reprise à la barre, responsabilité du dirigeant), veille BODACC, jurisprudentielle et échéances sociétaires. Brouillons ancrés dans les textes français, soumis à validation humaine.",
+      "description": "Droit des affaires français : contrats commerciaux (revue, NDA, CGV, mise en demeure, rupture brutale), vie sociale (constitution, assemblées, pacte d'associés, financement startup), M&A de la LOI au closing avec lentille Private Equity, entreprises en difficulté côté créancier, dirigeant et repreneur (déclaration de créance, pre-pack, reprise à la barre), veille BODACC et jurisprudence. Brouillons ancrés dans les textes français, soumis à validation humaine.",
       "author": {
         "name": "Hacienda",
         "url": "https://hacienda.diy"

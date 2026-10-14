@@ -1,10 +1,9 @@
 ---
 description: >
-  Génère des CGV (B2B, Code de commerce) ou des CGU/CGV (B2C, Code de la
-  consommation) sous forme de brouillon assisté : chaque clause appelant un
-  arbitrage est taguée [review]. Détecte le régime à l'intake et applique le
-  cadre correspondant. Ne produit jamais un document prêt à publier. Brouillon
-  soumis à validation humaine (avocat).
+  Rédige des CGV entre professionnels (Code de commerce) ou des CGU/CGV pour les
+  consommateurs (Code de la consommation), chaque clause à arbitrer étant signalée
+  [review]. Jamais un document prêt à publier. Brouillon soumis à validation de
+  l'avocat.
 argument-hint: "[B2B/B2C, secteur, canal, clauses à générer ou réviser]"
 ---
 
