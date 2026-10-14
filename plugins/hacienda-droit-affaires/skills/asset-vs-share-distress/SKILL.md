@@ -1,23 +1,19 @@
 ---
 name: asset-vs-share-distress
 description: >
-  Note d'orientation / arbitrage de structuration côté candidat-repreneur pour
-  décider COMMENT acquérir une cible en difficulté — rachat de titres (share
-  deal) ou rachat d'actifs (asset deal) — et router vers le bon playbook
-  d'exécution. Entonnoir amont du moat distressed-M&A : il décide et oriente, il
-  n'exécute pas. Double gate : (1) diagnostic du niveau de difficulté + routage —
-  in bonis / amiable / RJ / LJ ; cessation des paiements > 45 j sans procédure →
-  renvoi `prevention-difficultes` ; (2) responsabilité repreneur — un share deal
-  d'une société en difficulté ne purge AUCUN passif (on hérite dettes,
-  procédures, litiges), et une acquisition pré-procédure peut être annulée au
-  titre de la période suspecte (L.632-1 nullités de droit / L.632-2
-  facultatives). Cartographie aussi L.1224-1 (transfert social), la solidarité
-  fiscale L.1684 CGI (cession de fonds), l'extension de procédure / confusion de
-  patrimoine, l'insuffisance d'actif L.651-2 et le passif environnemental ICPE.
-  Route vers `prevention-difficultes` / `pre-pack-cession` / `reprise-a-la-barre`
-  / `cession-actifs-isoles` / `spa-review`. Côté repreneur uniquement. N'exécute
-  pas (ni offre, ni SPA, ni acte de cession) et ne donne AUCUN conseil fiscal.
-  Brouillon, validation humaine (avocat) OBLIGATOIRE.
+  Note d'orientation côté candidat-repreneur pour décider COMMENT acquérir une
+  cible en difficulté — rachat de titres (share deal) ou d'actifs (asset deal) —
+  et router vers le bon playbook d'exécution : il décide et oriente, il n'exécute
+  pas. Double gate : (1) diagnostic du niveau de difficulté (in bonis / amiable /
+  RJ / LJ) ; cessation des paiements > 45 j sans procédure →
+  `prevention-difficultes` ; (2) responsabilité repreneur — un share deal ne purge
+  AUCUN passif, et une acquisition pré-procédure peut tomber en période suspecte
+  (L.632-1 / L.632-2). Cartographie transfert social, solidarité fiscale,
+  confusion de patrimoine, insuffisance d'actif et passif environnemental. Route
+  vers `prevention-difficultes` / `pre-pack-cession` / `reprise-a-la-barre` /
+  `cession-actifs-isoles` / `spa-review`. Côté repreneur uniquement ; ni offre, ni
+  SPA, ni acte de cession, AUCUN conseil fiscal. Brouillon, validation humaine
+  (avocat) OBLIGATOIRE.
 version: "2.0.0"
 argument-hint: "[note d'orientation (mode unique), cible à quel stade de difficulté ?, titres ou actifs envisagés ?, acquisition avant ou après jugement ?, côté repreneur]"
 authors: ["Hacienda"]
