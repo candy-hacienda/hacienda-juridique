@@ -6,7 +6,7 @@ Ce depot est la marketplace juridique Hacienda.
 
 - Nom produit : Hacienda
 - Site : https://hacienda.diy
-- Depot : `jamon8888/hacienda-juridique`
+- Depot : `candy-hacienda/hacienda-juridique` (fork de travail ; `jamon8888/hacienda-juridique` : historique public, lecture seule)
 - Langue produit : francais
 - Licence code : AGPL-3.0-or-later
 
