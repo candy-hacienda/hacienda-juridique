@@ -4,7 +4,7 @@
 
 - Produit : Hacienda
 - URL : https://hacienda.diy
-- Depot cible : `jamon8888/hacienda-juridique`
+- Depot cible : `candy-hacienda/hacienda-juridique` (fork de travail ; `jamon8888/hacienda-juridique` : historique public, lecture seule)
 - Licence : AGPL-3.0-or-later
 
 Ne pas introduire de reference, exemple, chemin, branding, auteur, plugin ou manifest qui ne soit pas Hacienda.
