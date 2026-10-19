@@ -25,5 +25,8 @@ __pycache__/
 # Résultats de `claude plugin eval` (rapports locaux, non versionnés)
 plugins/*/evals/results/
 
-# Documents de travail internes : dépôt privé séparé
+# Dossier de travail local, non versionné
 /interne/
+
+# Instructions locales, non versionnées
+CLAUDE.local.md
