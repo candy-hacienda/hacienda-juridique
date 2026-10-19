@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 /**
- * Diagnostic prêt à lancer pour le défaut serveur (b) du handoff
- * (interne/docs/handoff/latest.md, « B — 01-spa-review FAIT ») :
+ * Diagnostic prêt à lancer pour le défaut serveur (b) :
  *
  *   legifrance_get_article({ code: "Code de commerce", num: "L441-10" })
  *   → « Article introuvable », observé deux fois, alors que l'article existe.
@@ -11,7 +10,7 @@
  * normalizeArticleNum ni dans le mapping LEGITEXT pour ce cas précis :
  * "L441-10" ressort inchangé (déjà au format canonique), et le LEGITEXT du
  * Code de commerce (LEGITEXT000005634379) est confirmé correct par d'autres
- * lectures réussies sur le même code (ex. L622-24, cf. handoff).
+ * lectures réussies sur le même code (ex. L622-24).
  *
  * Hypothèse restante (non vérifiable sans appel réel) : hoquet transitoire
  * côté PISTE/DILA sur cet article précis, aggravé par la mise en cache 24h

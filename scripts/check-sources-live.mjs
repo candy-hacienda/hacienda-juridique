@@ -6,7 +6,7 @@
  *
  * Contexte : un filtre ou un champ qui ne correspond pas à la valeur réelle ne
  * provoque en général aucune erreur — l'API répond 0 résultat, ignore le filtre ou
- * le champ lu est vide (cf. audit interne/docs/backlog/audit-filtre-valeur-reelle-2026-10-06.md).
+ * le champ lu est vide.
  * Les tests unitaires ne peuvent pas le voir : seul l'appel réel le montre.
  *
  * Prérequis : `npm run build`, identifiants PISTE dans ~/.config/Hacienda/credentials.json
